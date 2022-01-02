@@ -1,0 +1,134 @@
+﻿<Fluent:RibbonWindow x:Class="Paint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
+        xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        xmlns:local="clr-namespace:Paint"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1250" Loaded="RibbonWindow_Loaded">
+    <StackPanel>
+        <Fluent:Ribbon>
+            <!--Backstage-->
+            <Fluent:Ribbon.Menu>
+                <Fluent:Backstage Header="File">
+
+                </Fluent:Backstage>
+            </Fluent:Ribbon.Menu>
+
+            <!--Quick access item-->
+            
+            <Fluent:Ribbon.QuickAccessItems>
+                <Fluent:QuickAccessMenuItem Header="Save">
+                    <Fluent:Button Icon="Images/save.png"  RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
+                </Fluent:QuickAccessMenuItem>
+
+                <Fluent:QuickAccessMenuItem Header="Undo">
+                    <Fluent:Button Icon="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
+                </Fluent:QuickAccessMenuItem>
+
+
+                <Fluent:QuickAccessMenuItem Header="Redo">
+                    <Fluent:Button Icon="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
+                </Fluent:QuickAccessMenuItem>
+            </Fluent:Ribbon.QuickAccessItems>
+
+            <!--Tabs-->
+            <Fluent:RibbonTabItem Header="Home">
+                <!--Clipboard-->
+                <Fluent:RibbonGroupBox Header="Clipboard" Width="110">
+                    <StackPanel Orientation="Horizontal">
+                        <Fluent:Button Name="pasteButton" Header="Paste" Margin="0,10,0,0">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <Fluent:Button Name="cutButton" Header="Cut" Margin="0,10,0,0">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/cut.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+                        <Fluent:Button Name="copyButton" Header="Copy" Margin="0,10,0,0">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+                    </StackPanel>
+                </Fluent:RibbonGroupBox>
+                <!--Tools-->
+                <Fluent:RibbonGroupBox Header="Tool" Width="85">
+                    <StackPanel Orientation="Horizontal" Width="74">
+                        
+                        <Fluent:Button Name="fillButton" Margin="0,15,0,0" Height="40">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/fill.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <Fluent:Button Name="textButton" Margin="7,15,0,0" Height="40">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/text.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+                    </StackPanel>
+                </Fluent:RibbonGroupBox>
+                <!--Shapes-->
+                <Fluent:RibbonGroupBox Header="Shapes" Width="300">
+                    <!--Add shapes' icon here-->
+                    <ListBox Width="200" Height="60" Margin="5,5,0,0">
+                        
+                    </ListBox>
+                </Fluent:RibbonGroupBox>
+                
+                <!--Size-->
+                <Fluent:RibbonGroupBox Width="70">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,0" Width="60" HorizontalAlignment="Center">
+                        <Image Source="Images/size.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
+                               Width="40" HorizontalAlignment="Center"></Image>
+
+                        <Fluent:ComboBox x:Name="sizeComboBox" Height="15" IsEditable="False" HorizontalAlignment="Center">
+                            <ComboBoxItem Content="1 px"/>
+                            <ComboBoxItem Content="3 px"/>
+                            <ComboBoxItem Content="5 px"/>
+                        </Fluent:ComboBox>
+                    </StackPanel>
+
+                </Fluent:RibbonGroupBox>
+
+                <!--Colors-->
+                <Fluent:RibbonGroupBox Header="Colors" Width="250" >
+                    <StackPanel Orientation="Horizontal">
+                        <Fluent:Button Name="editColorButton" Header="Edit Colors" Width="50" Click="editColorButton_Click" Margin="0,10,0,0">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/color_wheel.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <xctk:ColorPicker Name="colorPicker" SelectedColor="{Binding DataColor, UpdateSourceTrigger=PropertyChanged}"
+                         DisplayColorAndName="True" UsingAlphaChannel="False" AvailableColorsSortingMode="HueSaturationBrightness"
+                                          Width="185" Height="22" SelectedColorChanged="colorPicker_SelectedColorChanged"></xctk:ColorPicker>
+
+
+                    </StackPanel>
+                    
+                </Fluent:RibbonGroupBox>
+        
+        </Fluent:RibbonTabItem>
+
+            <Fluent:RibbonTabItem Header="View">
+                
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+
+        <!--Drawing area-->
+        <Canvas>
+            <Border Background="Transparent" MouseDown="canvas_MouseDown" 
+                MouseMove="canvas_MouseMove" 
+                MouseUp="canvas_MouseUp" Width="1250" Height="550">
+
+            </Border>
+        </Canvas>
+    </StackPanel>
+</Fluent:RibbonWindow>
