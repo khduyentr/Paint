@@ -17,6 +17,8 @@
     <None Remove="Images\size.png" />
     <None Remove="Images\text.png" />
     <None Remove="Images\undo.png" />
+    <None Remove="Images\zoom_in.png" />
+    <None Remove="Images\zoom_out.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,8 @@
     <Resource Include="Images\size.png" />
     <Resource Include="Images\text.png" />
     <Resource Include="Images\undo.png" />
+    <Resource Include="Images\zoom_in.png" />
+    <Resource Include="Images\zoom_out.png" />
   </ItemGroup>
 
 </Project>

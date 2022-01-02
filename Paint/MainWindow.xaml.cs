@@ -26,6 +26,15 @@ namespace Paint
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Implement interface and child class
+        /// </summary>
+
+
+        /// <summary>
+        /// End of implement interface
+        /// </summary>
+
         private void editColorButton_Click(object sender, RoutedEventArgs e)
         {
            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
@@ -55,6 +64,21 @@ namespace Paint
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void createNewButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void openFileButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void saveFileButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
