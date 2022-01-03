@@ -51,14 +51,14 @@ namespace Paint
 
         private void colorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            if (colorPicker.SelectedColor.HasValue)
-            {
-                //Color C = colorPicker.SelectedColor.Value;
-                //int Red = C.R;
-                //int Green = C.G;
-                //int Blue = C.B;
-                //long colorVal = Convert.ToInt64(Blue * (Math.Pow(256, 0)) + Green * (Math.Pow(256, 1)) + Red * (Math.Pow(256, 2)));
-            }
+            //if (colorPicker.SelectedColor.HasValue)
+            //{
+            //    //Color C = colorPicker.SelectedColor.Value;
+            //    //int Red = C.R;
+            //    //int Green = C.G;
+            //    //int Blue = C.B;
+            //    //long colorVal = Convert.ToInt64(Blue * (Math.Pow(256, 0)) + Green * (Math.Pow(256, 1)) + Red * (Math.Pow(256, 2)));
+            //}
         }
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)

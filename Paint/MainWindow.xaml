@@ -9,6 +9,21 @@
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
         Title="Paint" Height="700" Width="1250" Loaded="RibbonWindow_Loaded">
+
+    <Fluent:RibbonWindow.Resources>
+        <Style x:Key="DisableMouseOver" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Fluent:RibbonWindow.Resources>
     <StackPanel>
         <Fluent:Ribbon>
             <!--Backstage-->
@@ -111,17 +126,96 @@
                 </Fluent:RibbonGroupBox>
 
                 <!--Colors-->
-                <Fluent:RibbonGroupBox Header="Colors" Width="250" >
+                <Fluent:RibbonGroupBox Header="Colors" Width="320" >
                     <StackPanel Orientation="Horizontal">
-                        <Fluent:Button Name="editColorButton" Header="Edit Colors" Width="50" Click="editColorButton_Click" Margin="0,10,0,0">
+
+                        <Grid Margin="5,0,0,0" Width="40" Height="70">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
+                                                            Width="27" Height="27"/>
+                            <Button Background="Blue" Grid.Column="0" Grid.Row="0" Width="25" Height="25"
+                                    Style="{StaticResource DisableMouseOver}"></Button>
+
+                            
+
+                            
+                        </Grid>
+
+
+
+                            <!--<xctk:ColorPicker Name="colorPicker" SelectedColor="{Binding DataColor, UpdateSourceTrigger=PropertyChanged}"
+                         DisplayColorAndName="True" UsingAlphaChannel="False" AvailableColorsSortingMode="HueSaturationBrightness"
+                                          Width="185" Height="22" SelectedColorChanged="colorPicker_SelectedColorChanged"></xctk:ColorPicker>-->
+                        
+                        <Grid  Margin="20,5,0,2" Width="200">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+
+
+                                <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
+                                                            Width="28" Height="28"/>
+                                <Button Grid.Column="0" Grid.Row="0" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="Black"></Button>
+
+
+                                <Border Grid.Column="1" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
+                                                            Width="28" Height="28"/>
+                                <Button Grid.Column="1" Grid.Row="0" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="Gray"></Button>
+
+                                <Border Grid.Column="2" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
+                                                        Width="28" Height="28"/>
+                                <Button Grid.Column="2" Grid.Row="0" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="Red"></Button>
+
+                                <Border Grid.Column="3" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
+                                                    Width="28" Height="28"/>
+                                <Button Grid.Column="3" Grid.Row="0" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="Orange"></Button>
+
+                                <Border Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
+                                                Width="28" Height="28"/>
+                                <Button Grid.Column="0" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="Blue"></Button>
+                                
+                                <Border Grid.Column="1" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
+                                                Width="28" Height="28"/>
+                                <Button Grid.Column="1" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="LightBlue"></Button>
+
+                                <Border Grid.Column="2" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
+                                            Width="28" Height="28"/>
+                                <Button Grid.Column="2" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                                Background="Purple">
+                                </Button>
+
+                                <Border Grid.Column="3" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
+                                        Width="28" Height="28"/>
+                                <Button Grid.Column="3" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                        Background="Pink"></Button>
+                            </Grid>
+
+                        <Fluent:Button Name="editColorButton" Header="Edit Colors" Width="60" Click="editColorButton_Click" Margin="0,10,0,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/color_wheel.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
 
-                        <xctk:ColorPicker Name="colorPicker" SelectedColor="{Binding DataColor, UpdateSourceTrigger=PropertyChanged}"
-                         DisplayColorAndName="True" UsingAlphaChannel="False" AvailableColorsSortingMode="HueSaturationBrightness"
-                                          Width="185" Height="22" SelectedColorChanged="colorPicker_SelectedColorChanged"></xctk:ColorPicker>
 
 
                     </StackPanel>
