@@ -29,17 +29,11 @@
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
                 <Fluent:ApplicationMenu Header="File">
-                    <Fluent:MenuItem Header="New" Name="createNewButton" Click="createNewButton_Click">
-                             
-                    </Fluent:MenuItem>
-
-                    <Fluent:MenuItem Header="Open" Name="openFileButton" Click="openFileButton_Click">
-
-                    </Fluent:MenuItem>
-
-                    <Fluent:MenuItem Header="Save" Name="saveFileButton" Click="saveFileButton_Click">
-
-                    </Fluent:MenuItem>
+                    <Fluent:MenuItem Header="New" Icon="Images/new_file.png" Name="createNewButton" Click="createNewButton_Click"/>
+                    <Fluent:MenuItem Header="Open" Icon="Images/open.png" Name="openFileButton" Click="openFileButton_Click"/>
+                    <Fluent:MenuItem Header="Save" Icon="Images/save.png" Name="saveFileButton" Click="saveFileButton_Click"/>
+                    <Fluent:MenuItem Header="Save As" Icon="Images/save_as.png" Name="saveAsButton" Click="saveAsButton_Click"/>
+                    
                 </Fluent:ApplicationMenu>
             </Fluent:Ribbon.Menu>
 
@@ -49,7 +43,7 @@
             
             <Fluent:Ribbon.QuickAccessItems>
                 <Fluent:QuickAccessMenuItem Header="Save">
-                    <Fluent:Button Icon="Images/save.png"  RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
+                    <Fluent:Button Icon="Images/save.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
                 </Fluent:QuickAccessMenuItem>
 
                 <Fluent:QuickAccessMenuItem Header="Undo">
@@ -222,15 +216,15 @@
         </Fluent:RibbonTabItem>
 
             <Fluent:RibbonTabItem Header="View">
-                <Fluent:RibbonGroupBox Header="Zoom" Width="100">
+                <Fluent:RibbonGroupBox Header="Zoom">
                     <StackPanel Orientation="Horizontal">
-                        <Fluent:Button Name="zoomInButton" Header="Zoom in" Margin="0,10,0,0">
+                        <Fluent:Button Name="zoomInButton" Header="Zoom in" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/zoom_in.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
 
-                        <Fluent:Button Name="zoomOutButton" Header="Zoom out" Margin="10,10,0,0">
+                        <Fluent:Button Name="zoomOutButton" Header="Zoom out" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/zoom_out.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
