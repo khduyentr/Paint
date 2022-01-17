@@ -102,9 +102,9 @@
                 </Fluent:RibbonGroupBox>
                 
                 <!--Size-->
-                <Fluent:RibbonGroupBox Width="70">
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,0" Width="60" HorizontalAlignment="Center">
-                        <Image Source="Images/size.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
+                <Fluent:RibbonGroupBox>
+                    <StackPanel Orientation="Vertical" Margin="4,4,4,0" HorizontalAlignment="Center">
+                        <Image Source="Images/line_thickness.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
                                Width="40" HorizontalAlignment="Center"></Image>
 
                         <Fluent:ComboBox x:Name="sizeComboBox" Height="15" IsEditable="False" HorizontalAlignment="Center">
