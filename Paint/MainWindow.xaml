@@ -126,7 +126,7 @@
                 </Fluent:RibbonGroupBox>
 
                 <!--Colors-->
-                <Fluent:RibbonGroupBox Header="Colors" Width="320" >
+                <Fluent:RibbonGroupBox Header="Colors" Width="350" >
                     <StackPanel Orientation="Horizontal">
 
                         <Grid Margin="5,0,0,0" Width="40" Height="70">
