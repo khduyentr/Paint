@@ -79,6 +79,8 @@
                         </Fluent:Button>
                     </StackPanel>
                 </Fluent:RibbonGroupBox>
+                
+                
                 <!--Tools-->
                 <Fluent:RibbonGroupBox Header="Tool">
                     <Fluent:Button Name="fillButton" Header="Fill" Padding="4,4,4,0">
@@ -107,10 +109,12 @@
                         <Image Source="Images/line_thickness.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
                                Width="40" HorizontalAlignment="Center"></Image>
 
-                        <Fluent:ComboBox x:Name="sizeComboBox" Height="15" IsEditable="False" HorizontalAlignment="Center">
-                            <ComboBoxItem Content="1 px"/>
-                            <ComboBoxItem Content="3 px"/>
-                            <ComboBoxItem Content="5 px"/>
+                        <Fluent:ComboBox x:Name="sizeComboBox" Height="20" IsEditable="False" HorizontalAlignment="Center"
+                                         SelectionChanged="sizeComboBox_SelectionChanged">
+                            <ComboBoxItem IsSelected="True" Content="1 pixel"/>
+                            <ComboBoxItem Content="3 pixel"/>
+                            <ComboBoxItem Content="5 pixel"/>
+                            <ComboBoxItem Content="8 pixel"/>
                         </Fluent:ComboBox>
                     </StackPanel>
 
@@ -212,8 +216,45 @@
                     </StackPanel>
                     
                 </Fluent:RibbonGroupBox>
-        
-        </Fluent:RibbonTabItem>
+
+                <Fluent:RibbonGroupBox Header="Testing">
+                    <StackPanel Orientation="Horizontal">
+                        <Fluent:Button Name="newLineButton" Header="Line" Padding="4,4,4,0"
+                                       Click="lineButton_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <Fluent:Button Name="newRectangleButton" Header="Rect" Padding="4,4,4,0"
+                                       Click="rectangleButton_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/cut.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+                        <Fluent:Button Name="newEllipseButton" Header="Ellipse" Padding="4,4,4,0"
+                                       Click="ellipseButton_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <Fluent:Button Name="newCircleButton" Header="Circle" Padding="4,4,4,0"
+                                       Click="circleButton_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <Fluent:Button Name="newSquareButton" Header="Square" Padding="4,4,4,0"
+                                       Click="squareButton_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+                    </StackPanel>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
 
             <Fluent:RibbonTabItem Header="View">
                 <Fluent:RibbonGroupBox Header="Zoom">
@@ -236,9 +277,17 @@
 
         <!--Drawing area-->
 
-        <Border Background="Transparent" Height="550">
+        <Grid>
+            <Canvas Name="drawingArea" Background="White" Height="550">
 
-        </Border>
+            </Canvas>
+
+            <Border Background="Transparent" MouseDown="drawingArea_MouseDown" MouseUp="drawingArea_MouseUp"
+                MouseMove="drawingArea_MouseMove">
+                
+            </Border>
+        </Grid>
+
 
     </StackPanel>
 </Fluent:RibbonWindow>
