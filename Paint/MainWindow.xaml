@@ -29,17 +29,11 @@
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
                 <Fluent:ApplicationMenu Header="File">
-                    <Fluent:MenuItem Header="New" Name="createNewButton" Click="createNewButton_Click">
-                             
-                    </Fluent:MenuItem>
-
-                    <Fluent:MenuItem Header="Open" Name="openFileButton" Click="openFileButton_Click">
-
-                    </Fluent:MenuItem>
-
-                    <Fluent:MenuItem Header="Save" Name="saveFileButton" Click="saveFileButton_Click">
-
-                    </Fluent:MenuItem>
+                    <Fluent:MenuItem Header="New" Icon="Images/new_file.png" Name="createNewButton" Click="createNewButton_Click"/>
+                    <Fluent:MenuItem Header="Open" Icon="Images/open.png" Name="openFileButton" Click="openFileButton_Click"/>
+                    <Fluent:MenuItem Header="Save" Icon="Images/save.png" Name="saveFileButton" Click="saveFileButton_Click"/>
+                    <Fluent:MenuItem Header="Save As" Icon="Images/save_as.png" Name="saveAsButton" Click="saveAsButton_Click"/>
+                    
                 </Fluent:ApplicationMenu>
             </Fluent:Ribbon.Menu>
 
@@ -49,7 +43,7 @@
             
             <Fluent:Ribbon.QuickAccessItems>
                 <Fluent:QuickAccessMenuItem Header="Save">
-                    <Fluent:Button Icon="Images/save.png"  RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
+                    <Fluent:Button Icon="Images/save.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
                 </Fluent:QuickAccessMenuItem>
 
                 <Fluent:QuickAccessMenuItem Header="Undo">
@@ -65,20 +59,20 @@
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <!--Clipboard-->
-                <Fluent:RibbonGroupBox Header="Clipboard" Width="110">
+                <Fluent:RibbonGroupBox Header="Clipboard">
                     <StackPanel Orientation="Horizontal">
-                        <Fluent:Button Name="pasteButton" Header="Paste" Margin="0,10,0,0">
+                        <Fluent:Button Name="pasteButton" Header="Paste" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
 
-                        <Fluent:Button Name="cutButton" Header="Cut" Margin="0,10,0,0">
+                        <Fluent:Button Name="cutButton" Header="Cut" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/cut.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
-                        <Fluent:Button Name="copyButton" Header="Copy" Margin="0,10,0,0">
+                        <Fluent:Button Name="copyButton" Header="Copy" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
@@ -86,21 +80,18 @@
                     </StackPanel>
                 </Fluent:RibbonGroupBox>
                 <!--Tools-->
-                <Fluent:RibbonGroupBox Header="Tool" Width="85">
-                    <StackPanel Orientation="Horizontal" Width="74">
-                        
-                        <Fluent:Button Name="fillButton" Margin="0,15,0,0" Height="40">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/fill.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
+                <Fluent:RibbonGroupBox Header="Tool">
+                    <Fluent:Button Name="fillButton" Header="Fill" Padding="4,4,4,0">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/fill.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
 
-                        <Fluent:Button Name="textButton" Margin="7,15,0,0" Height="40">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/text.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-                    </StackPanel>
+                    <Fluent:Button Name="textButton" Header="Add Text" Padding="4,4,4,0">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/text.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <!--Shapes-->
                 <Fluent:RibbonGroupBox Header="Shapes" Width="300">
@@ -111,9 +102,9 @@
                 </Fluent:RibbonGroupBox>
                 
                 <!--Size-->
-                <Fluent:RibbonGroupBox Width="70">
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,0" Width="60" HorizontalAlignment="Center">
-                        <Image Source="Images/size.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
+                <Fluent:RibbonGroupBox>
+                    <StackPanel Orientation="Vertical" Margin="4,4,4,0" HorizontalAlignment="Center">
+                        <Image Source="Images/line_thickness.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
                                Width="40" HorizontalAlignment="Center"></Image>
 
                         <Fluent:ComboBox x:Name="sizeComboBox" Height="15" IsEditable="False" HorizontalAlignment="Center">
@@ -210,7 +201,7 @@
                                         Background="Pink"></Button>
                             </Grid>
 
-                        <Fluent:Button Name="editColorButton" Header="Edit Colors" Width="60" Click="editColorButton_Click" Margin="0,10,0,0">
+                        <Fluent:Button Name="editColorButton" Header="Edit Colors" Click="editColorButton_Click" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/color_wheel.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
@@ -225,15 +216,15 @@
         </Fluent:RibbonTabItem>
 
             <Fluent:RibbonTabItem Header="View">
-                <Fluent:RibbonGroupBox Header="Zoom" Width="100">
+                <Fluent:RibbonGroupBox Header="Zoom">
                     <StackPanel Orientation="Horizontal">
-                        <Fluent:Button Name="zoomInButton" Header="Zoom in" Margin="0,10,0,0">
+                        <Fluent:Button Name="zoomInButton" Header="Zoom in" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/zoom_in.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
 
-                        <Fluent:Button Name="zoomOutButton" Header="Zoom out" Margin="10,10,0,0">
+                        <Fluent:Button Name="zoomOutButton" Header="Zoom out" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/zoom_out.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
