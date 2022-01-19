@@ -40,8 +40,6 @@ namespace Paint
         // property of a shape
         static int _thickness = 1;
 
-
-
         class ShapeType
         {
             public const int Line = 1;
@@ -50,10 +48,6 @@ namespace Paint
             public const int Square = 4;
             public const int Circle = 5;
         }
-
-
-
-
 
         /// <summary>
         /// Implement interface and child class
@@ -96,10 +90,10 @@ namespace Paint
                     Y2 = Y,
                     StrokeThickness = _thickness,
                     Stroke = new SolidColorBrush(Colors.Red)
-                   
+
                 };
 
-                
+
 
                 return line;
             }
@@ -133,7 +127,7 @@ namespace Paint
                     Y2 = _end.Y,
                     StrokeThickness = _thickness,
                     Stroke = new SolidColorBrush(Colors.Red)
-                    
+
 
                 };
 
@@ -173,10 +167,10 @@ namespace Paint
                 {
                     Width = width,
                     Height = height,
-                    
+
                     StrokeThickness = _thickness,
                     Stroke = new SolidColorBrush(Colors.Red),
-                    
+
                 };
 
                 Canvas.SetLeft(rect, left);
@@ -220,7 +214,7 @@ namespace Paint
                     Height = height,
                     Stroke = new SolidColorBrush(Colors.Red),
                     StrokeThickness = _thickness,
-                    
+
                 };
 
                 Canvas.SetLeft(ellipse, left);
@@ -251,7 +245,7 @@ namespace Paint
                 _rightBottom.X = x;
 
                 var width = _rightBottom.X - _leftTop.X;
-                
+
                 _rightBottom.Y = _leftTop.Y + width; // width = height 
             }
 
@@ -271,7 +265,7 @@ namespace Paint
                     Width = width,
                     Height = height,
                     Stroke = new SolidColorBrush(Colors.Red),
-                   
+
                     StrokeThickness = _thickness
                 };
 
@@ -288,9 +282,7 @@ namespace Paint
         {
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
-            public string Name => throw new NotImplementedException();
-
-
+            public string Name => "Square";
 
             public void HandleStart(double x, double y)
             {
@@ -324,7 +316,7 @@ namespace Paint
                     Width = width,
                     Height = height,
                     Stroke = new SolidColorBrush(Colors.Red),
-                    
+
                     StrokeThickness = _thickness
                 };
 
@@ -342,8 +334,8 @@ namespace Paint
 
         private void editColorButton_Click(object sender, RoutedEventArgs e)
         {
-           System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
-        
+            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
+
             if (colorPicker.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 //Colors color = colorPicker.Color;
@@ -364,7 +356,7 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
@@ -489,14 +481,23 @@ namespace Paint
         {
             int index = sizeComboBox.SelectedIndex;
 
-            if (index == 0)
-                _thickness = 1;
-            else if (index == 1)
-                _thickness = 3;
-            else if (index == 2)
-                _thickness = 5;
-            else if (index == 3)
-                _thickness = 8;
+            switch (index)
+            {
+                case 0:
+                    _thickness = 1;
+                    break;
+                case 1:
+                    _thickness = 2;
+                    break;
+                case 2:
+                    _thickness = 3;
+                    break;
+                case 3:
+                    _thickness = 5;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

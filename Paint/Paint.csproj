@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\1px.png" />
     <None Remove="Images\color_wheel.png" />
     <None Remove="Images\copy.png" />
     <None Remove="Images\cut.png" />
     <None Remove="Images\fill.png" />
-    <None Remove="Images\line_thickness.png" />
     <None Remove="Images\new_file.png" />
     <None Remove="Images\open.png" />
     <None Remove="Images\paste.png" />
@@ -20,6 +20,7 @@
     <None Remove="Images\save_as.png" />
     <None Remove="Images\size.png" />
     <None Remove="Images\text.png" />
+    <None Remove="Images\thickness.png" />
     <None Remove="Images\undo.png" />
     <None Remove="Images\zoom_in.png" />
     <None Remove="Images\zoom_out.png" />
@@ -31,11 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\1px.png" />
     <Resource Include="Images\color_wheel.png" />
     <Resource Include="Images\copy.png" />
     <Resource Include="Images\cut.png" />
     <Resource Include="Images\fill.png" />
-    <Resource Include="Images\line_thickness.png" />
+    <Resource Include="Images\thickness.png" />
     <Resource Include="Images\new_file.png" />
     <Resource Include="Images\open.png" />
     <Resource Include="Images\paste.png" />
