@@ -234,7 +234,42 @@ namespace Paint
             private Point2D _rightBottom = new Point2D();
             public string Name => "Circle";
 
+            public UIElement Draw()
+            {
+                double width = Math.Abs(_rightBottom.X - _leftTop.X);
+                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
 
+                var circle = new Ellipse()
+                {
+                    Width = width,
+                    Height = height,
+                    Stroke = new SolidColorBrush(Colors.Red),
+                    StrokeThickness = 1
+                };
+
+                if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
+                {
+                    Canvas.SetLeft(circle, _leftTop.X);
+                    Canvas.SetTop(circle, _leftTop.Y);
+                }
+                else if (_rightBottom.X < _leftTop.X && _rightBottom.Y > _leftTop.Y)
+                {
+                    Canvas.SetLeft(circle, _rightBottom.X);
+                    Canvas.SetTop(circle, _leftTop.Y);
+                }
+                else if (_rightBottom.X > _leftTop.X && _rightBottom.Y < _leftTop.Y)
+                {
+                    Canvas.SetLeft(circle, _leftTop.X);
+                    Canvas.SetTop(circle, _rightBottom.Y);
+                }
+                else
+                {
+                    Canvas.SetLeft(circle, _rightBottom.X);
+                    Canvas.SetTop(circle, _rightBottom.Y);
+                }
+
+                return circle;
+            }
             public void HandleStart(double x, double y)
             {
                 _leftTop.X = x;
@@ -243,39 +278,27 @@ namespace Paint
             public void HandleEnd(double x, double y)
             {
                 _rightBottom.X = x;
+                _rightBottom.Y = y;
 
-                var width = _rightBottom.X - _leftTop.X;
 
-                _rightBottom.Y = _leftTop.Y + width; // width = height 
-            }
-
-            public UIElement Draw()
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
-
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var circle = new Ellipse()
+                double width = Math.Abs(_rightBottom.X - _leftTop.X);
+                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
+                if (width < height)
                 {
-                    Width = width,
-                    Height = height,
-                    Stroke = new SolidColorBrush(Colors.Red),
+                    if (_rightBottom.Y < _leftTop.Y)
+                        _rightBottom.Y = _leftTop.Y - width;
+                    else
+                        _rightBottom.Y = _leftTop.Y + width;
+                }
+                else
+                if (width > height)
+                {
+                    if (_rightBottom.X < _leftTop.X)
+                        _rightBottom.X = _leftTop.X - height;
+                    else _rightBottom.X = _leftTop.X + height;
+                }
 
-                    StrokeThickness = _thickness
-                };
-
-                Canvas.SetLeft(circle, left);
-                Canvas.SetTop(circle, top);
-
-                return circle;
             }
-
-
         }
 
         class Square2D : IShape
@@ -284,46 +307,71 @@ namespace Paint
             private Point2D _rightBottom = new Point2D();
             public string Name => "Square";
 
-            public void HandleStart(double x, double y)
-            {
-                _leftTop.X = x;
-                _leftTop.Y = y;
-            }
-
-            public void HandleEnd(double x, double y)
-            {
-                _rightBottom.X = x;
-
-                var width = _rightBottom.X - _leftTop.X;
-
-
-                _rightBottom.Y = _leftTop.Y + width; // width = height 
-            }
-
             public UIElement Draw()
             {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
 
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
+                double width = Math.Abs(_rightBottom.X - _leftTop.X);
+                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
 
                 var square = new Rectangle()
                 {
                     Width = width,
                     Height = height,
                     Stroke = new SolidColorBrush(Colors.Red),
-
-                    StrokeThickness = _thickness
+                    StrokeThickness = 1
                 };
 
-                Canvas.SetLeft(square, left);
-                Canvas.SetTop(square, top);
+                if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
+                {
+                    Canvas.SetLeft(square, _leftTop.X);
+                    Canvas.SetTop(square, _leftTop.Y);
+                }
+                else if (_rightBottom.X < _leftTop.X && _rightBottom.Y > _leftTop.Y)
+                {
+                    Canvas.SetLeft(square, _rightBottom.X);
+                    Canvas.SetTop(square, _leftTop.Y);
+                }
+                else if (_rightBottom.X > _leftTop.X && _rightBottom.Y < _leftTop.Y)
+                {
+                    Canvas.SetLeft(square, _leftTop.X);
+                    Canvas.SetTop(square, _rightBottom.Y);
+                }
+                else
+                {
+                    Canvas.SetLeft(square, _rightBottom.X);
+                    Canvas.SetTop(square, _rightBottom.Y);
+                }
 
                 return square;
+            }
+            public void HandleStart(double x, double y)
+            {
+                _leftTop.X = x;
+                _leftTop.Y = y;
+            }
+            public void HandleEnd(double x, double y)
+            {
+                _rightBottom.X = x;
+                _rightBottom.Y = y;
+
+
+                double width = Math.Abs(_rightBottom.X - _leftTop.X);
+                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
+                if (width < height)
+                {
+                    if (_rightBottom.Y < _leftTop.Y)
+                        _rightBottom.Y = _leftTop.Y - width;
+                    else
+                        _rightBottom.Y = _leftTop.Y + width;
+                }
+                else
+                if (width > height)
+                {
+                    if (_rightBottom.X < _leftTop.X)
+                        _rightBottom.X = _leftTop.X - height;
+                    else _rightBottom.X = _leftTop.X + height;
+                }
+
             }
 
 
