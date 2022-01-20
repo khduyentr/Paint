@@ -8,17 +8,22 @@
 
   <ItemGroup>
     <None Remove="Images\1px.png" />
+    <None Remove="Images\circle.png" />
     <None Remove="Images\color_wheel.png" />
     <None Remove="Images\copy.png" />
     <None Remove="Images\cut.png" />
+    <None Remove="Images\ellipse.png" />
     <None Remove="Images\fill.png" />
+    <None Remove="Images\line.png" />
     <None Remove="Images\new_file.png" />
     <None Remove="Images\open.png" />
     <None Remove="Images\paste.png" />
+    <None Remove="Images\rectangle.png" />
     <None Remove="Images\redo.png" />
     <None Remove="Images\save.png" />
     <None Remove="Images\save_as.png" />
     <None Remove="Images\size.png" />
+    <None Remove="Images\square.png" />
     <None Remove="Images\text.png" />
     <None Remove="Images\thickness.png" />
     <None Remove="Images\undo.png" />
@@ -33,10 +38,15 @@
 
   <ItemGroup>
     <Resource Include="Images\1px.png" />
+    <Resource Include="Images\circle.png" />
     <Resource Include="Images\color_wheel.png" />
     <Resource Include="Images\copy.png" />
     <Resource Include="Images\cut.png" />
+    <Resource Include="Images\ellipse.png" />
     <Resource Include="Images\fill.png" />
+    <Resource Include="Images\line.png" />
+    <Resource Include="Images\rectangle.png" />
+    <Resource Include="Images\square.png" />
     <Resource Include="Images\thickness.png" />
     <Resource Include="Images\new_file.png" />
     <Resource Include="Images\open.png" />

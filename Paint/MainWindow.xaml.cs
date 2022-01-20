@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,23 +33,18 @@ namespace Paint
         /// </summary>
 
         bool _isDrawing = false;
-        double _lastX = -1;
-        double _lastY = -1;
-        int _choice = ShapeType.Line;
+
         List<IShape> _shapes = new List<IShape>();
-        IShape _preview = new Line2D();
+        IShape _preview = null;
+        string _selectedShapeName = "";
+
+        //Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
+        List<IShape> allShape = new List<IShape>();
+        ShapeFactory _factory = ShapeFactory.Instance;
 
         // property of a shape
         static int _currentThickness = 1;
         static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
-        class ShapeType
-        {
-            public const int Line = 1;
-            public const int Rectangle = 2;
-            public const int Ellipse = 3;
-            public const int Square = 4;
-            public const int Circle = 5;
-        }
 
         /// <summary>
         /// Implement interface and child class
@@ -56,23 +53,97 @@ namespace Paint
         interface IShape
         {
             string Name { get; }
+            string Icon { get; }
 
             SolidColorBrush Brush { get; set; }
             int Thickness { get; set; }
 
             void HandleStart(double x, double y);
             void HandleEnd(double x, double y);
-
-            UIElement Draw();
-            UIElement Draw(SolidColorBrush brush);
+            IShape Clone();
 
             UIElement Draw(SolidColorBrush brush, int thickness);
+        }
+
+        class ShapeFactory
+        {
+            Dictionary<string, IShape> _prototypes;
+            private static ShapeFactory _instance = null;
+            private ShapeFactory()
+            {
+                _prototypes = new Dictionary<string, IShape>();
+
+                IShape line = new Line2D();
+                IShape rect = new Rectangle2D();
+                IShape ellipse = new Ellipse2D();
+                IShape circle = new Circle2D();
+                IShape square = new Square2D();
+
+                _prototypes.Add(line.Name, line);
+                _prototypes.Add(rect.Name, rect);
+                _prototypes.Add(ellipse.Name, ellipse);
+                _prototypes.Add(circle.Name, circle);
+                _prototypes.Add(square.Name, square);
+
+
+                
+                // Uncomment this block of code later to load dll file
+
+                /*string exePath = Assembly.GetExecutingAssembly().Location;
+                string folder = System.IO.Path.GetDirectoryName(exePath);
+                var fis = new DirectoryInfo(folder).GetFiles("*.dll");
+
+                foreach (var f in fis) // Lần lượt duyệt qua các file dll
+                {
+                    var assembly = Assembly.LoadFile(f.FullName);
+                    var types = assembly.GetTypes();
+
+                    foreach (var t in types)
+                    {
+                        if (t.IsClass && typeof(IShape).IsAssignableFrom(t))
+                        {
+                            IShape shape = (IShape)Activator.CreateInstance(t);
+                            _prototypes.Add(shape.Name, shape);
+                        }
+                    }
+                }*/
+                
+            }
+        
+
+            public static ShapeFactory Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                        _instance = new ShapeFactory();
+                    return _instance;
+                }
+            }
+
+            public Dictionary<string, IShape> GetDictionary()
+            {
+                return _prototypes;
+            }
+
+            public IShape Create(string shapeName)
+            {
+                IShape shape = null; 
+
+                if (_prototypes.ContainsKey(shapeName))
+                    shape = _prototypes[shapeName].Clone();
+                return shape;
+            }
+
+            
         }
 
         class Point2D : IShape
         {
             public double X { get; set; }
             public double Y { get; set; }
+
+            public string Icon { get; }
 
             public SolidColorBrush Brush { get; set; }
             public string Name => "Point";
@@ -91,34 +162,6 @@ namespace Paint
                 Y = y;
             }
 
-            public UIElement Draw()
-            {
-                Line line = new Line()
-                {
-                    X1 = X,
-                    Y1 = Y,
-                    X2 = X,
-                    Y2 = Y,
-                    StrokeThickness = _currentThickness,
-                    Stroke = new SolidColorBrush(Colors.Red)
-                };
-                return line;
-            }
-
-            public UIElement Draw(SolidColorBrush brush)
-            {
-                Line line = new Line()
-                {
-                    X1 = X,
-                    Y1 = Y,
-                    X2 = X,
-                    Y2 = Y,
-                    StrokeThickness = _currentThickness,
-                    Stroke = brush
-                };
-                return line;
-            }
-
             public UIElement Draw(SolidColorBrush brush, int thickness)
             {
                 Line line = new Line()
@@ -132,6 +175,11 @@ namespace Paint
                 };
                 return line;
             }
+
+            public IShape Clone()
+            {
+                return new Point2D();
+            }
         }
 
         class Line2D : IShape
@@ -142,6 +190,7 @@ namespace Paint
 
             public SolidColorBrush Brush { get; set; }
             public string Name => "Line";
+            public string Icon => "Images/line.png";
 
             public int Thickness { get; set; }
 
@@ -155,39 +204,6 @@ namespace Paint
                 _end = new Point2D() { X = x, Y = y };
             }
 
-            public UIElement Draw()
-            {
-                Line line = new Line()
-                {
-                    X1 = _start.X,
-                    Y1 = _start.Y,
-                    X2 = _end.X,
-                    Y2 = _end.Y,
-                    StrokeThickness = _currentThickness,
-                    Stroke = new SolidColorBrush(Colors.Red)
-
-                };
-
-                return line;
-            }
-
-            public UIElement Draw(SolidColorBrush brush)
-            {
-                Line line = new Line()
-                {
-                    X1 = _start.X,
-                    Y1 = _start.Y,
-                    X2 = _end.X,
-                    Y2 = _end.Y,
-                    StrokeThickness = _currentThickness,
-                    //Stroke = new SolidColorBrush(Colors.Red)
-                    Stroke = brush
-
-                };
-
-                return line;
-            }
-
             public UIElement Draw(SolidColorBrush brush, int thickness)
             {
                 Line line = new Line()
@@ -204,6 +220,11 @@ namespace Paint
 
                 return line;
             }
+
+            public IShape Clone()
+            {
+                return new Line2D();
+            }
         }
 
         class Rectangle2D : IShape
@@ -211,6 +232,7 @@ namespace Paint
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
             public SolidColorBrush Brush { get; set; }
+            public string Icon => "Images/rectangle.png";
             public string Name => "Rectangle";
 
             public int Thickness { get; set; }
@@ -225,60 +247,7 @@ namespace Paint
                 _rightBottom = new Point2D() { X = x, Y = y };
             }
 
-            public UIElement Draw()
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
 
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var rect = new Rectangle()
-                {
-                    Width = width,
-                    Height = height,
-                    StrokeThickness = _currentThickness,
-                    Stroke = new SolidColorBrush(Colors.Red),
-
-                    
-
-                };
-
-                Canvas.SetLeft(rect, left);
-                Canvas.SetTop(rect, top);
-
-                return rect;
-            }
-
-            public UIElement Draw(SolidColorBrush brush)
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
-
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var rect = new Rectangle()
-                {
-                    Width = width,
-                    Height = height,
-
-                    StrokeThickness = _currentThickness,
-                    Stroke = brush
-
-                };
-
-                Canvas.SetLeft(rect, left);
-                Canvas.SetTop(rect, top);
-
-                return rect;
-            }
 
             public UIElement Draw(SolidColorBrush brush, int thickness)
             {
@@ -306,6 +275,11 @@ namespace Paint
 
                 return rect;
             }
+
+            public IShape Clone()
+            {
+                return new Rectangle2D();
+            }
         }
 
         class Ellipse2D : IShape
@@ -314,6 +288,7 @@ namespace Paint
             private Point2D _rightBottom = new Point2D();
             public SolidColorBrush Brush { get; set; }
             public string Name => "Ellipse";
+            public string Icon => "Images/ellipse.png";
 
             public int Thickness { get; set; }
 
@@ -328,59 +303,7 @@ namespace Paint
                 _rightBottom.X = x;
                 _rightBottom.Y = y;
             }
-            public UIElement Draw()
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
 
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var ellipse = new Ellipse()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = new SolidColorBrush(Colors.Red),
-                    
-                    StrokeThickness = _currentThickness,
-
-                };
-
-                Canvas.SetLeft(ellipse, left);
-                Canvas.SetTop(ellipse, top);
-
-                return ellipse;
-            }
-
-            public UIElement Draw(SolidColorBrush brush)
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
-
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var ellipse = new Ellipse()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = brush,
-
-                    StrokeThickness = _currentThickness,
-
-                };
-
-                Canvas.SetLeft(ellipse, left);
-                Canvas.SetTop(ellipse, top);
-
-                return ellipse;
-            }
 
             public UIElement Draw(SolidColorBrush brush, int thickness)
             {
@@ -408,6 +331,11 @@ namespace Paint
 
                 return ellipse;
             }
+
+            public IShape Clone()
+            {
+                return new Ellipse2D();
+            }
         }
 
 
@@ -418,7 +346,7 @@ namespace Paint
             private Point2D _rightBottom = new Point2D();
             public SolidColorBrush Brush { get; set; }
             public string Name => "Circle";
-
+            public string Icon => "Images/circle.png";
             public int Thickness { get; set; }
 
             public void HandleStart(double x, double y)
@@ -433,82 +361,6 @@ namespace Paint
                 var width = _rightBottom.X - _leftTop.X;
                 
                 _rightBottom.Y = _leftTop.Y + width; // width = height 
-            }
-
-
-            public UIElement Draw()
-            {
-                double width = Math.Abs(_rightBottom.X - _leftTop.X);
-                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
-
-                var circle = new Ellipse()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = new SolidColorBrush(Colors.Red),
-                    StrokeThickness = 1
-                };
-
-                if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(circle, _leftTop.X);
-                    Canvas.SetTop(circle, _leftTop.Y);
-                }
-                else if (_rightBottom.X < _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(circle, _rightBottom.X);
-                    Canvas.SetTop(circle, _leftTop.Y);
-                }
-                else if (_rightBottom.X > _leftTop.X && _rightBottom.Y < _leftTop.Y)
-                {
-                    Canvas.SetLeft(circle, _leftTop.X);
-                    Canvas.SetTop(circle, _rightBottom.Y);
-                }
-                else
-                {
-                    Canvas.SetLeft(circle, _rightBottom.X);
-                    Canvas.SetTop(circle, _rightBottom.Y);
-                }
-
-                return circle;
-            }
-
-
-            public UIElement Draw(SolidColorBrush brush)
-            {
-                double width = Math.Abs(_rightBottom.X - _leftTop.X);
-                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
-
-                var circle = new Ellipse()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = brush,
-                    StrokeThickness = 1
-                };
-
-                if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(circle, _leftTop.X);
-                    Canvas.SetTop(circle, _leftTop.Y);
-                }
-                else if (_rightBottom.X < _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(circle, _rightBottom.X);
-                    Canvas.SetTop(circle, _leftTop.Y);
-                }
-                else if (_rightBottom.X > _leftTop.X && _rightBottom.Y < _leftTop.Y)
-                {
-                    Canvas.SetLeft(circle, _leftTop.X);
-                    Canvas.SetTop(circle, _rightBottom.Y);
-                }
-                else
-                {
-                    Canvas.SetLeft(circle, _rightBottom.X);
-                    Canvas.SetTop(circle, _rightBottom.Y);
-                }
-
-                return circle;
             }
 
             public UIElement Draw(SolidColorBrush brush, int thickness)
@@ -547,6 +399,11 @@ namespace Paint
 
                 return circle;
             }
+
+            public IShape Clone()
+            {
+                return new Circle2D();
+            }
         }
 
  
@@ -556,46 +413,11 @@ namespace Paint
             private Point2D _rightBottom = new Point2D();
             public string Name => "Square";
 
+            public string Icon => "Images/square.png";
+
             public SolidColorBrush Brush { get ; set ; }
             public int Thickness { get; set; }
 
-            public UIElement Draw()
-            {
-
-                double width = Math.Abs(_rightBottom.X - _leftTop.X);
-                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
-
-                var square = new Rectangle()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = new SolidColorBrush(Colors.Red),
-                    StrokeThickness = 1
-                };
-
-                if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(square, _leftTop.X);
-                    Canvas.SetTop(square, _leftTop.Y);
-                }
-                else if (_rightBottom.X < _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(square, _rightBottom.X);
-                    Canvas.SetTop(square, _leftTop.Y);
-                }
-                else if (_rightBottom.X > _leftTop.X && _rightBottom.Y < _leftTop.Y)
-                {
-                    Canvas.SetLeft(square, _leftTop.X);
-                    Canvas.SetTop(square, _rightBottom.Y);
-                }
-                else
-                {
-                    Canvas.SetLeft(square, _rightBottom.X);
-                    Canvas.SetTop(square, _rightBottom.Y);
-                }
-
-                return square;
-            }
             public void HandleStart(double x, double y)
             {
                 _leftTop.X = x;
@@ -626,43 +448,6 @@ namespace Paint
 
             }
 
-            public UIElement Draw(SolidColorBrush brush)
-            {
-
-                double width = Math.Abs(_rightBottom.X - _leftTop.X);
-                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
-
-                var square = new Rectangle()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = brush,
-                    StrokeThickness = 1
-                };
-
-                if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(square, _leftTop.X);
-                    Canvas.SetTop(square, _leftTop.Y);
-                }
-                else if (_rightBottom.X < _leftTop.X && _rightBottom.Y > _leftTop.Y)
-                {
-                    Canvas.SetLeft(square, _rightBottom.X);
-                    Canvas.SetTop(square, _leftTop.Y);
-                }
-                else if (_rightBottom.X > _leftTop.X && _rightBottom.Y < _leftTop.Y)
-                {
-                    Canvas.SetLeft(square, _leftTop.X);
-                    Canvas.SetTop(square, _rightBottom.Y);
-                }
-                else
-                {
-                    Canvas.SetLeft(square, _rightBottom.X);
-                    Canvas.SetTop(square, _rightBottom.Y);
-                }
-
-                return square;
-            }
 
             public UIElement Draw(SolidColorBrush brush, int thickness)
             {
@@ -700,10 +485,13 @@ namespace Paint
 
                 return square;
             }
+
+            public IShape Clone()
+            {
+                return new Square2D();
+            }
         }
-        /// <summary>
-        /// End of implement interface
-        /// </summary>
+
 
         private void editColorButton_Click(object sender, RoutedEventArgs e)
         {
@@ -718,7 +506,19 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            
+            foreach (var item in _factory.GetDictionary())
+            {
+                var shape = item.Value as IShape;
+                allShape.Add(shape);
+            }
 
+            iconListView.ItemsSource = allShape;
+
+            _selectedShapeName = allShape[0].Name;
+            
+            _preview = _factory.Create(_selectedShapeName);
+          
         }
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
@@ -741,43 +541,10 @@ namespace Paint
 
         }
 
-        private void lineButton_Click(object sender, RoutedEventArgs e)
-        {
-            _choice = ShapeType.Line;
-            _preview = new Line2D();
-        }
-
-        private void rectangleButton_Click(object sender, RoutedEventArgs e)
-        {
-            _choice = ShapeType.Rectangle;
-            _preview = new Rectangle2D();
-        }
-
-        private void ellipseButton_Click(object sender, RoutedEventArgs e)
-        {
-            _choice = ShapeType.Ellipse;
-            _preview = new Ellipse2D();
-        }
-
-        private void circleButton_Click(object sender, RoutedEventArgs e)
-        {
-            _choice = ShapeType.Circle;
-            _preview = new Circle2D();
-        }
-
-        private void squareButton_Click(object sender, RoutedEventArgs e)
-        {
-            _choice = ShapeType.Square;
-            _preview = new Square2D();
-        }
-
         private void drawingArea_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _isDrawing = true;
             Point pos = e.GetPosition(drawingArea);
-
-            _lastX = pos.X;
-            _lastY = pos.Y;
 
             _preview.HandleStart(pos.X, pos.Y);
         }
@@ -812,22 +579,17 @@ namespace Paint
             Point pos = e.GetPosition(drawingArea);
             _preview.HandleEnd(pos.X, pos.Y);
 
-            // add to shapes list & save it color + thickness
 
+            // add to shapes list & save it color + thickness
             _shapes.Add(_preview);
             _preview.Brush = _currentColor;
             _preview.Thickness = _currentThickness;
 
-            if (_choice == ShapeType.Line)
-                _preview = new Line2D();
-            else if (_choice == ShapeType.Rectangle)
-                _preview = new Rectangle2D();
-            else if (_choice == ShapeType.Ellipse)
-                _preview = new Ellipse2D();
-            else if (_choice == ShapeType.Circle)
-                _preview = new Circle2D();
-            else if (_choice == ShapeType.Square)
-                _preview = new Square2D();
+
+            // move to new preview 
+
+            
+            _preview = _factory.Create(_selectedShapeName);
 
             // re draw everything
 
@@ -913,6 +675,15 @@ namespace Paint
         private void btnBasicBrown_Click(object sender, RoutedEventArgs e)
         {
             _currentColor = new SolidColorBrush(Color.FromRgb(160, 82, 45));
+        }
+
+        private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var index = iconListView.SelectedIndex;
+
+            _selectedShapeName = allShape[index].Name;
+            
+            _preview = _factory.Create(_selectedShapeName);
         }
     }
 }

@@ -95,11 +95,29 @@
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <!--Shapes-->
-                <Fluent:RibbonGroupBox Header="Shapes" Width="300">
+                <Fluent:RibbonGroupBox Header="Shapes" Width="250">
                     <!--Add shapes' icon here-->
-                    <ListBox Width="200" Height="60" Margin="5,5,0,0">
-                        
-                    </ListBox>
+                    <ListView Name="iconListView" Width="200" Height="60" Margin="20,12,0,0" SelectionChanged="iconListView_SelectionChanged"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Icon}" Width="25" Height="25" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="ToolTip" Value="{Binding Name}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
                 </Fluent:RibbonGroupBox>
                 
                 <!--Size-->
@@ -140,12 +158,9 @@
                 </Fluent:RibbonGroupBox>
 
                 <!--Colors-->
-                <Fluent:RibbonGroupBox Header="Colors" Width="350" >
+                <Fluent:RibbonGroupBox Header="Colors" Width="300" >
                     <StackPanel Orientation="Horizontal">
-                        <!--<xctk:ColorPicker Name="colorPicker" SelectedColor="{Binding DataColor, UpdateSourceTrigger=PropertyChanged}"
-                         DisplayColorAndName="True" UsingAlphaChannel="False" AvailableColorsSortingMode="HueSaturationBrightness"
-                                          Width="185" Height="22" SelectedColorChanged="colorPicker_SelectedColorChanged"></xctk:ColorPicker>-->
-                        
+
                         <Grid  Margin="20,5,0,2" Width="200">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />
@@ -223,7 +238,7 @@
                     
                 </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox Header="Testing">
+                <!--<Fluent:RibbonGroupBox Header="Testing">
                     <StackPanel Orientation="Horizontal">
                         <Fluent:Button Name="newLineButton" Header="Line" Padding="4,4,4,0"
                                        Click="lineButton_Click">
@@ -259,7 +274,7 @@
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
                     </StackPanel>
-                </Fluent:RibbonGroupBox>
+                </Fluent:RibbonGroupBox>-->
             </Fluent:RibbonTabItem>
 
             <Fluent:RibbonTabItem Header="View">
