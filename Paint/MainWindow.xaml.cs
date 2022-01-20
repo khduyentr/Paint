@@ -904,5 +904,15 @@ namespace Paint
         {
             _currentColor = new SolidColorBrush(Color.FromRgb(255, 182, 193));
         }
+
+        private void btnBasicYellow_Click(object sender, RoutedEventArgs e)
+        {
+            _currentColor = new SolidColorBrush(Color.FromRgb(255, 255, 0));
+        }
+
+        private void btnBasicBrown_Click(object sender, RoutedEventArgs e)
+        {
+            _currentColor = new SolidColorBrush(Color.FromRgb(160, 82, 45));
+        }
     }
 }

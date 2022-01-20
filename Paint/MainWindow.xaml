@@ -142,34 +142,13 @@
                 <!--Colors-->
                 <Fluent:RibbonGroupBox Header="Colors" Width="350" >
                     <StackPanel Orientation="Horizontal">
-
-                        <Grid Margin="5,0,0,0" Width="40" Height="70">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                
-                            </Grid.RowDefinitions>
-
-                            <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
-                                                            Width="27" Height="27"/>
-                            <Button Background="Blue" Grid.Column="0" Grid.Row="0" Width="25" Height="25"
-                                    Style="{StaticResource DisableMouseOver}"></Button>
-
-                            
-
-                            
-                        </Grid>
-
-
-
-                            <!--<xctk:ColorPicker Name="colorPicker" SelectedColor="{Binding DataColor, UpdateSourceTrigger=PropertyChanged}"
+                        <!--<xctk:ColorPicker Name="colorPicker" SelectedColor="{Binding DataColor, UpdateSourceTrigger=PropertyChanged}"
                          DisplayColorAndName="True" UsingAlphaChannel="False" AvailableColorsSortingMode="HueSaturationBrightness"
                                           Width="185" Height="22" SelectedColorChanged="colorPicker_SelectedColorChanged"></xctk:ColorPicker>-->
                         
                         <Grid  Margin="20,5,0,2" Width="200">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
@@ -202,7 +181,13 @@
                                 <Button Name="btnBasicOrange" Grid.Column="3" Grid.Row="0" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
                                         Background="Orange" Click="btnBasicOrange_Click"></Button>
 
-                                <Border Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
+                                <Border Grid.Column="4" Grid.Row="0" BorderThickness="1" BorderBrush="Black"
+                                                        Width="28" Height="28"/>
+                                <Button Name="btnBasicYellow" Grid.Column="4" Grid.Row="0" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                            Background="Yellow" Click="btnBasicYellow_Click"></Button>
+
+
+                            <Border Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
                                                 Width="28" Height="28"/>
                                 <Button Name="btnBasicBlue" Grid.Column="0" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
                                         Background="Blue" Click="btnBasicBlue_Click"></Button>
@@ -222,7 +207,12 @@
                                         Width="28" Height="28"/>
                                 <Button Name="btnBasicPink" Grid.Column="3" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
                                         Background="Pink" Click="btnBasicPink_Click"></Button>
-                            </Grid>
+
+                                <Border Grid.Column="4" Grid.Row="1" BorderThickness="1" BorderBrush="Black"
+                                            Width="28" Height="28"/>
+                                <Button Name="btnBasicBrown" Grid.Column="4" Grid.Row="1" Width="25" Height="25" Style="{StaticResource DisableMouseOver}"
+                                            Background="Brown" Click="btnBasicBrown_Click"></Button>
+                        </Grid>
 
                         <Fluent:Button Name="editColorButton" Header="Edit Colors" Click="editColorButton_Click" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
