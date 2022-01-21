@@ -549,17 +549,7 @@ namespace Paint
 
         }
 
-
-
-        private void saveAsButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Hi");
-            CreateSaveBitmap(drawingArea, @"D:/out.png");
-
-            
-        }
-
-        private void CreateSaveBitmap(Canvas canvas, string filename)
+        private void SaveCanvasToImage(Canvas canvas, string filename, string extension = "png")
         {
             RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
              (int)canvas.Width, (int)canvas.Height,
@@ -571,12 +561,51 @@ namespace Paint
             renderBitmap.Render(canvas);
 
             //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
 
-            using (FileStream file = File.Create(filename))
+            
+
+
+            switch (extension)
             {
-                encoder.Save(file);
+                case "png":
+                    PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
+                    pngEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        pngEncoder.Save(file);
+                    }
+                    break;
+                case "jpeg":
+                    JpegBitmapEncoder jpegEncoder = new JpegBitmapEncoder();
+                    jpegEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        jpegEncoder.Save(file);
+                    }
+                    break;
+                case "tiff":
+                    TiffBitmapEncoder tiffEncoder = new TiffBitmapEncoder();
+                    tiffEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        tiffEncoder.Save(file);
+                    }
+                    break;
+                case "bmp":
+                    
+                    BmpBitmapEncoder bitmapEncoder = new BmpBitmapEncoder();
+                    bitmapEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    using (FileStream file = File.Create(filename))
+                    {
+                        bitmapEncoder.Save(file);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -727,6 +756,16 @@ namespace Paint
 
         private void exportButton_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new System.Windows.Forms.SaveFileDialog();
+            dialog.Filter = "PNG (*.png)|*.png| JPEG (*.jpeg)|*.jpeg| BMP (*.bmp)|*.bmp | TIFF (*.tiff)|*.tiff";
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+                string extension = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[1];
+                
+                SaveCanvasToImage(drawingArea, path, extension);
+            }
 
         }
     }
