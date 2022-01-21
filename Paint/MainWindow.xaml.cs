@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -188,6 +189,18 @@ namespace Paint
             private Point2D _start = new Point2D();
             private Point2D _end = new Point2D();
 
+            public Point2D Start   // property
+            {
+                get { return _start; }   // get method
+                set { _start = value; }  // set method
+            }
+
+            public Point2D End   // property
+            {
+                get { return _end; }   // get method
+                set { _end = value; }  // set method
+            }
+
             public SolidColorBrush Brush { get; set; }
             public string Name => "Line";
             public string Icon => "Images/line.png";
@@ -231,6 +244,18 @@ namespace Paint
         {
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public Point2D LeftTop   // property
+            {
+                get { return _leftTop; }   // get method
+                set { _leftTop = value; }  // set method
+            }
+
+            public Point2D RightBottom
+            {
+                get { return _rightBottom; }   // get method
+                set { _rightBottom = value; }  // set method
+            }
             public SolidColorBrush Brush { get; set; }
             public string Icon => "Images/rectangle.png";
             public string Name => "Rectangle";
@@ -286,6 +311,18 @@ namespace Paint
         {
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public Point2D LeftTop   // property
+            {
+                get { return _leftTop; }   // get method
+                set { _leftTop = value; }  // set method
+            }
+
+            public Point2D RightBottom
+            {
+                get { return _rightBottom; }   // get method
+                set { _rightBottom = value; }  // set method
+            }
             public SolidColorBrush Brush { get; set; }
             public string Name => "Ellipse";
             public string Icon => "Images/ellipse.png";
@@ -343,6 +380,18 @@ namespace Paint
 
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public Point2D LeftTop   // property
+            {
+                get { return _leftTop; }   // get method
+                set { _leftTop = value; }  // set method
+            }
+
+            public Point2D RightBottom
+            {
+                get { return _rightBottom; }   // get method
+                set { _rightBottom = value; }  // set method
+            }
             public SolidColorBrush Brush { get; set; }
             public string Name => "Circle";
             public string Icon => "Images/circle.png";
@@ -424,6 +473,18 @@ namespace Paint
         {
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public Point2D LeftTop   // property
+            {
+                get { return _leftTop; }   // get method
+                set { _leftTop = value; }  // set method
+            }
+
+            public Point2D RightBottom
+            {
+                get { return _rightBottom; }   // get method
+                set { _rightBottom = value; }  // set method
+            }
             public string Name => "Square";
 
             public string Icon => "Images/square.png";
@@ -542,10 +603,56 @@ namespace Paint
         private void openFileButton_Click(object sender, RoutedEventArgs e)
         {
 
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+
+            dialog.Filter = "JSON (*.json)|*.json";
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+
+                string json = File.ReadAllText(path);
+
+
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Objects
+                };
+
+                _shapes.Clear();
+                List<IShape> containers = JsonConvert.DeserializeObject<List<IShape>>(json, settings);
+
+                foreach (var item in containers)
+                    _shapes.Add(item);
+            }
+
+            foreach (var shape in _shapes)
+            {
+                var element = shape.Draw(shape.Brush, shape.Thickness);
+                drawingArea.Children.Add(element);
+            }
         }
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
+
+            var settings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+
+            var serializedShapeList = JsonConvert.SerializeObject(_shapes, settings);
+
+
+            var dialog = new System.Windows.Forms.SaveFileDialog();
+
+            dialog.Filter = "JSON (*.json)|*.json";
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = dialog.FileName;
+                File.WriteAllText(path, serializedShapeList);
+            }
 
         }
 
