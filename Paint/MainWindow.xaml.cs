@@ -724,5 +724,10 @@ namespace Paint
 
             _preview = _factory.Create(_selectedShapeName);
         }
+
+        private void exportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
