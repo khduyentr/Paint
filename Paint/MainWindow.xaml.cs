@@ -357,10 +357,25 @@ namespace Paint
             public void HandleEnd(double x, double y)
             {
                 _rightBottom.X = x;
+                _rightBottom.Y = y;
 
-                var width = _rightBottom.X - _leftTop.X;
-                
-                _rightBottom.Y = _leftTop.Y + width; // width = height 
+
+                double width = Math.Abs(_rightBottom.X - _leftTop.X);
+                double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
+                if (width < height)
+                {
+                    if (_rightBottom.Y < _leftTop.Y)
+                        _rightBottom.Y = _leftTop.Y - width;
+                    else
+                        _rightBottom.Y = _leftTop.Y + width;
+                }
+                else
+                if (width > height)
+                {
+                    if (_rightBottom.X < _leftTop.X)
+                        _rightBottom.X = _leftTop.X - height;
+                    else _rightBottom.X = _leftTop.X + height;
+                }
             }
 
             public UIElement Draw(SolidColorBrush brush, int thickness)
@@ -372,8 +387,9 @@ namespace Paint
                 {
                     Width = width,
                     Height = height,
+                    StrokeThickness = thickness,
                     Stroke = brush,
-                    StrokeThickness = thickness
+                    
                 };
 
                 if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
@@ -536,9 +552,35 @@ namespace Paint
 
         }
 
+
+
         private void saveAsButton_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Hi");
+            CreateSaveBitmap(drawingArea, @"D:/out.png");
 
+            
+        }
+
+        private void CreateSaveBitmap(Canvas canvas, string filename)
+        {
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+             (int)canvas.Width, (int)canvas.Height,
+             96d, 96d, PixelFormats.Pbgra32);
+            // needed otherwise the image output is black
+            canvas.Measure(new Size((int)canvas.Width, (int)canvas.Height));
+            canvas.Arrange(new Rect(new Size((int)canvas.Width, (int)canvas.Height)));
+
+            renderBitmap.Render(canvas);
+
+            //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+            using (FileStream file = File.Create(filename))
+            {
+                encoder.Save(file);
+            }
         }
 
         private void drawingArea_MouseDown(object sender, MouseButtonEventArgs e)

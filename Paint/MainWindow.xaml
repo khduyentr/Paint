@@ -298,7 +298,7 @@
 
         <!--Drawing area-->
         <Grid>
-            <Canvas Name="drawingArea" Background="White" Height="550"/>
+            <Canvas Name="drawingArea" Background="White" Height="550" Width="1250"/>
             <Border Background="Transparent" MouseDown="drawingArea_MouseDown" MouseUp="drawingArea_MouseUp"
                 MouseMove="drawingArea_MouseMove"/>
         </Grid>
