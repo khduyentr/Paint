@@ -86,7 +86,7 @@ namespace Paint
                 _prototypes.Add(square.Name, square);
 
 
-                
+
                 // Uncomment this block of code later to load dll file
 
                 /*string exePath = Assembly.GetExecutingAssembly().Location;
@@ -107,9 +107,9 @@ namespace Paint
                         }
                     }
                 }*/
-                
+
             }
-        
+
 
             public static ShapeFactory Instance
             {
@@ -128,14 +128,14 @@ namespace Paint
 
             public IShape Create(string shapeName)
             {
-                IShape shape = null; 
+                IShape shape = null;
 
                 if (_prototypes.ContainsKey(shapeName))
                     shape = _prototypes[shapeName].Clone();
                 return shape;
             }
 
-            
+
         }
 
         class Point2D : IShape
@@ -148,7 +148,7 @@ namespace Paint
             public SolidColorBrush Brush { get; set; }
             public string Name => "Point";
 
-            public int Thickness { get ; set; }
+            public int Thickness { get; set; }
 
             public void HandleStart(double x, double y)
             {
@@ -338,7 +338,6 @@ namespace Paint
             }
         }
 
-
         class Circle2D : IShape
         {
 
@@ -359,7 +358,7 @@ namespace Paint
                 _rightBottom.X = x;
 
                 var width = _rightBottom.X - _leftTop.X;
-                
+
                 _rightBottom.Y = _leftTop.Y + width; // width = height 
             }
 
@@ -406,7 +405,6 @@ namespace Paint
             }
         }
 
- 
         class Square2D : IShape
         {
             private Point2D _leftTop = new Point2D();
@@ -415,7 +413,7 @@ namespace Paint
 
             public string Icon => "Images/square.png";
 
-            public SolidColorBrush Brush { get ; set ; }
+            public SolidColorBrush Brush { get; set; }
             public int Thickness { get; set; }
 
             public void HandleStart(double x, double y)
@@ -506,7 +504,7 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
+
             foreach (var item in _factory.GetDictionary())
             {
                 var shape = item.Value as IShape;
@@ -516,9 +514,9 @@ namespace Paint
             iconListView.ItemsSource = allShape;
 
             _selectedShapeName = allShape[0].Name;
-            
+
             _preview = _factory.Create(_selectedShapeName);
-          
+
         }
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
@@ -588,7 +586,7 @@ namespace Paint
 
             // move to new preview 
 
-            
+
             _preview = _factory.Create(_selectedShapeName);
 
             // re draw everything
@@ -682,7 +680,7 @@ namespace Paint
             var index = iconListView.SelectedIndex;
 
             _selectedShapeName = allShape[index].Name;
-            
+
             _preview = _factory.Create(_selectedShapeName);
         }
     }
