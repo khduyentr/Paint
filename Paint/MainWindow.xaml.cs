@@ -587,13 +587,42 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
+            // If nothing was drawn before, simply return
+            if (_shapes.Count == 0)
+                return;
+            // If the current file was saved before, reset everything back to default
             if (_isSaved)
             {
-                _currentThickness = 1;
-                _currentColor = new SolidColorBrush(Colors.Red);
-                _shapes.Clear();
-                drawingArea.Children.Clear();
-                _isSaved = false;
+                resetToDefault();
+                return;
+            }
+            
+            // If current file wasn't saved aka _isSaved is false, display a dialog
+            var result = MessageBox.Show("Do you want to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
+            if (MessageBoxResult.Yes == result)
+            {
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Objects
+                };
+                var serializedShapeList = JsonConvert.SerializeObject(_shapes, settings);
+
+                var dialog = new System.Windows.Forms.SaveFileDialog();
+                dialog.Filter = "JSON (*.json)|*.json";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string path = dialog.FileName;
+                    File.WriteAllText(path, serializedShapeList);
+                }
+                resetToDefault();
+            }
+            else if (MessageBoxResult.No == result)
+            {
+                resetToDefault();
+            } 
+            else if (MessageBoxResult.Cancel == result)
+            {
                 return;
             }
         }
@@ -883,6 +912,15 @@ namespace Paint
                 SaveCanvasToImage(drawingArea, path, extension);
             }
 
+        }
+
+        private void resetToDefault()
+        {
+            _currentThickness = 1;
+            _currentColor = new SolidColorBrush(Colors.Red);
+            _shapes.Clear();
+            drawingArea.Children.Clear();
+            _isSaved = false;
         }
     }
 }
