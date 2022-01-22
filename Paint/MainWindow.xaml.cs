@@ -46,6 +46,7 @@ namespace Paint
         // property of a shape
         static int _currentThickness = 1;
         static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
+        static new DoubleCollection _currentDash = null;
 
         /// <summary>
         /// Implement interface and child class
@@ -59,11 +60,14 @@ namespace Paint
             SolidColorBrush Brush { get; set; }
             int Thickness { get; set; }
 
+            DoubleCollection StrokeDash { get; set; }
+
             void HandleStart(double x, double y);
             void HandleEnd(double x, double y);
             IShape Clone();
 
-            UIElement Draw(SolidColorBrush brush, int thickness);
+
+            UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash);
         }
 
         class ShapeFactory
@@ -147,6 +151,7 @@ namespace Paint
             public string Icon { get; }
 
             public SolidColorBrush Brush { get; set; }
+            public DoubleCollection StrokeDash { get; set; }
             public string Name => "Point";
 
             public int Thickness { get; set; }
@@ -163,7 +168,8 @@ namespace Paint
                 Y = y;
             }
 
-            public UIElement Draw(SolidColorBrush brush, int thickness)
+
+            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
             {
                 Line line = new Line()
                 {
@@ -172,10 +178,14 @@ namespace Paint
                     X2 = X,
                     Y2 = Y,
                     StrokeThickness = thickness,
-                    Stroke = brush
+                    Stroke = brush,
+                    StrokeDashArray = dash
                 };
+
+
                 return line;
             }
+
 
             public IShape Clone()
             {
@@ -201,6 +211,8 @@ namespace Paint
                 set { _end = value; }  // set method
             }
 
+            public DoubleCollection StrokeDash { get; set; }
+
             public SolidColorBrush Brush { get; set; }
             public string Name => "Line";
             public string Icon => "Images/line.png";
@@ -217,7 +229,7 @@ namespace Paint
                 _end = new Point2D() { X = x, Y = y };
             }
 
-            public UIElement Draw(SolidColorBrush brush, int thickness)
+            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
             {
                 Line line = new Line()
                 {
@@ -226,11 +238,10 @@ namespace Paint
                     X2 = _end.X,
                     Y2 = _end.Y,
                     StrokeThickness = thickness,
-                    //Stroke = new SolidColorBrush(Colors.Red)
-                    Stroke = brush
+                    Stroke = brush,
+                    StrokeDashArray = dash
 
                 };
-
                 return line;
             }
 
@@ -257,6 +268,8 @@ namespace Paint
                 set { _rightBottom = value; }  // set method
             }
             public SolidColorBrush Brush { get; set; }
+
+            public DoubleCollection StrokeDash { get; set; }
             public string Icon => "Images/rectangle.png";
             public string Name => "Rectangle";
 
@@ -272,9 +285,7 @@ namespace Paint
                 _rightBottom = new Point2D() { X = x, Y = y };
             }
 
-
-
-            public UIElement Draw(SolidColorBrush brush, int thickness)
+            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
             {
                 var left = Math.Min(_rightBottom.X, _leftTop.X);
                 var top = Math.Min(_rightBottom.Y, _leftTop.Y);
@@ -291,8 +302,8 @@ namespace Paint
                     Height = height,
 
                     StrokeThickness = thickness,
-                    Stroke = brush
-
+                    Stroke = brush,
+                    StrokeDashArray = dash
                 };
 
                 Canvas.SetLeft(rect, left);
@@ -311,6 +322,8 @@ namespace Paint
         {
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public DoubleCollection StrokeDash { get; set; }
 
             public Point2D LeftTop   // property
             {
@@ -342,7 +355,8 @@ namespace Paint
             }
 
 
-            public UIElement Draw(SolidColorBrush brush, int thickness)
+
+            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
             {
                 var left = Math.Min(_rightBottom.X, _leftTop.X);
                 var top = Math.Min(_rightBottom.Y, _leftTop.Y);
@@ -360,6 +374,7 @@ namespace Paint
                     Stroke = brush,
 
                     StrokeThickness = thickness,
+                    StrokeDashArray = dash
 
                 };
 
@@ -380,6 +395,8 @@ namespace Paint
 
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public DoubleCollection StrokeDash { get; set; }
 
             public Point2D LeftTop   // property
             {
@@ -425,7 +442,7 @@ namespace Paint
                 }
             }
 
-            public UIElement Draw(SolidColorBrush brush, int thickness)
+            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
             {
                 double width = Math.Abs(_rightBottom.X - _leftTop.X);
                 double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
@@ -436,7 +453,8 @@ namespace Paint
                     Height = height,
                     StrokeThickness = thickness,
                     Stroke = brush,
-                    
+                    StrokeDashArray = dash
+
                 };
 
                 if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
@@ -473,6 +491,8 @@ namespace Paint
         {
             private Point2D _leftTop = new Point2D();
             private Point2D _rightBottom = new Point2D();
+
+            public DoubleCollection StrokeDash { get; set; }
 
             public Point2D LeftTop   // property
             {
@@ -522,8 +542,7 @@ namespace Paint
 
             }
 
-
-            public UIElement Draw(SolidColorBrush brush, int thickness)
+            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
             {
                 double width = Math.Abs(_rightBottom.X - _leftTop.X);
                 double height = Math.Abs(_rightBottom.Y - _leftTop.Y);
@@ -533,7 +552,8 @@ namespace Paint
                     Width = width,
                     Height = height,
                     Stroke = brush,
-                    StrokeThickness = thickness
+                    StrokeThickness = thickness,
+                    StrokeDashArray = dash
                 };
 
                 if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
@@ -628,7 +648,7 @@ namespace Paint
 
             foreach (var shape in _shapes)
             {
-                var element = shape.Draw(shape.Brush, shape.Thickness);
+                var element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
                 drawingArea.Children.Add(element);
             }
         }
@@ -653,7 +673,6 @@ namespace Paint
                 string path = dialog.FileName;
                 File.WriteAllText(path, serializedShapeList);
             }
-
         }
 
         private void SaveCanvasToImage(Canvas canvas, string filename, string extension = "png")
@@ -738,12 +757,12 @@ namespace Paint
                 // redraw all shapes
                 foreach (var shape in _shapes)
                 {
-                    UIElement element = shape.Draw(shape.Brush, shape.Thickness);
+                    UIElement element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
                     drawingArea.Children.Add(element);
                 }
 
                 // lastly, draw preview object 
-                drawingArea.Children.Add(_preview.Draw(_currentColor, _currentThickness));
+                drawingArea.Children.Add(_preview.Draw(_currentColor, _currentThickness, _currentDash));
             }
         }
 
@@ -759,6 +778,7 @@ namespace Paint
             _shapes.Add(_preview);
             _preview.Brush = _currentColor;
             _preview.Thickness = _currentThickness;
+            _preview.StrokeDash = _currentDash;
 
 
             // move to new preview 
@@ -774,7 +794,7 @@ namespace Paint
             // re draw all shape in shape list
             foreach (var shape in _shapes)
             {
-                var element = shape.Draw(shape.Brush, shape.Thickness);
+                var element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
                 drawingArea.Children.Add(element);
             }
         }
@@ -874,6 +894,29 @@ namespace Paint
                 SaveCanvasToImage(drawingArea, path, extension);
             }
 
+        }
+
+        private void dashComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = dashComboBox.SelectedIndex;
+
+            switch (index)
+            {
+                case 0:
+                    _currentDash = null;
+                    break;
+                case 1:
+                    _currentDash = new DoubleCollection() { 4, 1, 1, 1, 1, 1 };
+                    break;
+                case 2:
+                    _currentDash = new DoubleCollection() { 1, 1 };
+                    break;
+                case 3:
+                    _currentDash = new DoubleCollection() { 6, 1 };
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

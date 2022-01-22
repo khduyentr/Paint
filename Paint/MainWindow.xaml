@@ -125,21 +125,44 @@
                 </Fluent:RibbonGroupBox>
                 
                 <!--Size-->
-                <Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Width="250">
                     <StackPanel Orientation="Vertical" Margin="4,4,4,0" HorizontalAlignment="Center">
                         <Image Source="Images/thickness.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
                                Width="40" HorizontalAlignment="Center"/>
 
-                        <Fluent:ComboBox x:Name="sizeComboBox" Height="25" IsEditable="False" HorizontalAlignment="Center"
-                                         SelectionChanged="sizeComboBox_SelectionChanged">
+                        <Fluent:ComboBox x:Name="sizeComboBox" Height="20" IsEditable="False" HorizontalAlignment="Center"
+                                         SelectionChanged="sizeComboBox_SelectionChanged" Margin="0,8,0,0">
                             <ComboBoxItem IsSelected="True" Content="1 pixel"/>
                             <ComboBoxItem Content="2 pixel"/>
                             <ComboBoxItem Content="3 pixel"/>
                             <ComboBoxItem Content="5 pixel"/>
                         </Fluent:ComboBox>
                     </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="4,4,4,0" HorizontalAlignment="Center">
+                        <Image Source="Images/dash.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
+                               Width="40" HorizontalAlignment="Center"/>
+
+                        <Fluent:ComboBox x:Name="dashComboBox" Height="20" IsEditable="False" HorizontalAlignment="Center"
+                                         SelectionChanged="dashComboBox_SelectionChanged">
+                            <ComboBoxItem IsSelected="True">
+                                <TextBlock Text="__________" FontWeight="ExtraBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="_.._.._.._.." FontWeight="ExtraBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ComboBoxItem>
+
+                            <ComboBoxItem>
+                                <TextBlock Text="............" FontWeight="ExtraBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ComboBoxItem>
+
+                            <ComboBoxItem>
+                                <TextBlock Text="_ _ _ _ _ _ " FontWeight="ExtraBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ComboBoxItem>
+                        </Fluent:ComboBox>
+                    </StackPanel>
                     <Fluent:DropDownButton Name="chooseThickness" Header="Thickness" 
-                                           Icon="Images/thickness.png" LargeIcon="Images/thickness.png">
+                                           Icon="Images/thickness.png" LargeIcon="Images/thickness.png" >
                         <Fluent:Gallery Name="chooseThicknessMenu" MaxItemsInRow="1">
                             <StackPanel Orientation="Horizontal">
                                 <Border Width="40" Height="1" BorderBrush="Black" BorderThickness="1"/>
