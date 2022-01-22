@@ -620,11 +620,17 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_backgroundImagePath.Length > 0 && _shapes.Count == 0)
+            {
+                _backgroundImagePath = "";
+                drawingArea.Background = new SolidColorBrush(Colors.White);
+            }
             if (_shapes.Count == 0)
             {
-                MessageBox.Show("This canvas is empty");
+                // MessageBox.Show("This canvas is empty");
                 return;
             }
+            
 
             if (_isSaved)
             {
@@ -735,8 +741,6 @@ namespace Paint
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            _isSaved = true;
-
             var settings = new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Objects
@@ -758,6 +762,7 @@ namespace Paint
             {
                 string path = dialog.FileName;
                 File.WriteAllText(path, content);
+                _isSaved = true;
             }
         }
 
@@ -859,20 +864,19 @@ namespace Paint
             Point pos = e.GetPosition(drawingArea);
             _preview.HandleEnd(pos.X, pos.Y);
 
-            // add to shapes list & save it color + thickness
+            // Ddd to shapes list & save it color + thickness
             _shapes.Add(_preview);
             _preview.Brush = _currentColor;
             _preview.Thickness = _currentThickness;
             _preview.StrokeDash = _currentDash;
 
-            // draw new thing -> isSaved = false
+            // Draw new thing -> isSaved = false
             _isSaved = false;
 
-            // move to new preview 
+            // Move to new preview 
             _preview = _factory.Create(_selectedShapeName);
 
-            // re draw everything
-
+            // Re-draw the canvas
             redrawCanvas();
         }
 
@@ -970,7 +974,7 @@ namespace Paint
 
                 SaveCanvasToImage(drawingArea, path, extension);
             }
-
+            _isSaved = true;
         }
 
         private void dashComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1015,7 +1019,7 @@ namespace Paint
 
         private void ResetToDefault()
         {
-            //_isSaved = false; //but there is no time it is true ?
+            _isSaved = false;
             _isDrawing = false;
 
             _shapes.Clear();
