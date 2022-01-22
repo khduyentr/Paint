@@ -34,16 +34,17 @@ namespace Paint
         /// </summary>
 
         bool _isDrawing = false;
+        bool _isSaved = false;
 
         List<IShape> _shapes = new List<IShape>();
         IShape _preview = null;
         string _selectedShapeName = "";
 
-        //Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
+        // Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
         List<IShape> allShape = new List<IShape>();
         ShapeFactory _factory = ShapeFactory.Instance;
 
-        // property of a shape
+        // Shapes properties
         static int _currentThickness = 1;
         static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
 
@@ -436,7 +437,7 @@ namespace Paint
                     Height = height,
                     StrokeThickness = thickness,
                     Stroke = brush,
-                    
+
                 };
 
                 if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
@@ -567,17 +568,6 @@ namespace Paint
         }
 
 
-        private void editColorButton_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
-
-            if (colorPicker.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                _currentColor = new SolidColorBrush(Color.FromRgb(colorPicker.Color.R, colorPicker.Color.G, colorPicker.Color.B));
-            }
-        }
-
-
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -597,7 +587,15 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (_isSaved)
+            {
+                _currentThickness = 1;
+                _currentColor = new SolidColorBrush(Colors.Red);
+                _shapes.Clear();
+                drawingArea.Children.Clear();
+                _isSaved = false;
+                return;
+            }
         }
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
@@ -652,6 +650,7 @@ namespace Paint
             {
                 string path = dialog.FileName;
                 File.WriteAllText(path, serializedShapeList);
+                _isSaved = true;
             }
 
         }
@@ -669,7 +668,7 @@ namespace Paint
 
             //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-            
+
 
 
             switch (extension)
@@ -702,7 +701,7 @@ namespace Paint
                     }
                     break;
                 case "bmp":
-                    
+
                     BmpBitmapEncoder bitmapEncoder = new BmpBitmapEncoder();
                     bitmapEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
 
@@ -802,6 +801,16 @@ namespace Paint
             }
         }
 
+        private void editColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
+
+            if (colorPicker.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                _currentColor = new SolidColorBrush(Color.FromRgb(colorPicker.Color.R, colorPicker.Color.G, colorPicker.Color.B));
+            }
+        }
+
         private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
         {
             _currentColor = new SolidColorBrush(Color.FromRgb(0, 0, 0));
@@ -870,7 +879,7 @@ namespace Paint
             {
                 string path = dialog.FileName;
                 string extension = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[1];
-                
+
                 SaveCanvasToImage(drawingArea, path, extension);
             }
 
