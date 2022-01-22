@@ -620,17 +620,17 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (_shapes.Count == 0)
-            //{
-            //    MessageBox.Show("This canvas is empty");
-            //    return;
-            //}    
+            if (_shapes.Count == 0)
+            {
+                MessageBox.Show("This canvas is empty");
+                return;
+            }
 
-            //if (_isSaved)
-            //{
-            //    ResetToDefault();
-            //    return;
-            //}
+            if (_isSaved)
+            {
+                ResetToDefault();
+                return;
+            }
 
             var result = MessageBox.Show("Do you want to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
 
@@ -1040,6 +1040,9 @@ namespace Paint
             _currentDash = null;
 
             _backgroundImage = "";
+
+            dashComboBox.SelectedIndex = 0;
+            sizeComboBox.SelectedIndex = 0;
 
             drawingArea.Children.Clear();
             drawingArea.Background = new SolidColorBrush(Colors.White);
