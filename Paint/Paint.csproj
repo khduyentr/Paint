@@ -16,6 +16,7 @@
     <None Remove="Images\ellipse.png" />
     <None Remove="Images\export.png" />
     <None Remove="Images\fill.png" />
+    <None Remove="Images\import.png" />
     <None Remove="Images\line.png" />
     <None Remove="Images\new_file.png" />
     <None Remove="Images\open.png" />
@@ -49,6 +50,7 @@
     <Resource Include="Images\ellipse.png" />
     <Resource Include="Images\export.png" />
     <Resource Include="Images\fill.png" />
+    <Resource Include="Images\import.png" />
     <Resource Include="Images\line.png" />
     <Resource Include="Images\rectangle.png" />
     <Resource Include="Images\square.png" />

@@ -34,6 +34,8 @@
                                      RenderOptions.BitmapScalingMode="HighQuality"/>
                     <Fluent:MenuItem Header="Save" Icon="Images/save.png" Name="saveFileButton" Click="saveFileButton_Click"
                                      RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <Fluent:MenuItem Header="Import" Icon="Images/import.png" Name="importButton" Click="importButton_Click"
+                                     RenderOptions.BitmapScalingMode="HighQuality"/>
                     <Fluent:MenuItem Header="Export" Icon="Images/export.png" Name="exportButton" Click="exportButton_Click"
                                      RenderOptions.BitmapScalingMode="HighQuality"/>
                     
