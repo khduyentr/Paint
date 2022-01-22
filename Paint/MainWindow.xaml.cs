@@ -920,6 +920,7 @@ namespace Paint
             _currentColor = new SolidColorBrush(Colors.Red);
             _shapes.Clear();
             drawingArea.Children.Clear();
+            sizeComboBox.SelectedIndex = 0;
             _isSaved = false;
         }
     }
