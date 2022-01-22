@@ -1047,5 +1047,15 @@ namespace Paint
             drawingArea.Children.Clear();
             drawingArea.Background = new SolidColorBrush(Colors.White);
         }
+
+        private void undoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void redoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

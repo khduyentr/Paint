@@ -42,11 +42,7 @@
                 </Fluent:ApplicationMenu>
             </Fluent:Ribbon.Menu>
 
-
-
-            <!--Quick access item-->
-            
-            <Fluent:Ribbon.QuickAccessItems>
+            <!--<Fluent:Ribbon.QuickAccessItems>
                 <Fluent:QuickAccessMenuItem Header="Save">
                     <Fluent:Button Icon="Images/save.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
                 </Fluent:QuickAccessMenuItem>
@@ -54,12 +50,10 @@
                 <Fluent:QuickAccessMenuItem Header="Undo">
                     <Fluent:Button Icon="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
                 </Fluent:QuickAccessMenuItem>
-
-
                 <Fluent:QuickAccessMenuItem Header="Redo">
                     <Fluent:Button Icon="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
                 </Fluent:QuickAccessMenuItem>
-            </Fluent:Ribbon.QuickAccessItems>
+            </Fluent:Ribbon.QuickAccessItems>-->
 
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
@@ -85,25 +79,35 @@
                     </StackPanel>
                 </Fluent:RibbonGroupBox>
                 
-                
                 <!--Tools-->
                 <Fluent:RibbonGroupBox Header="Tool">
+                    <Fluent:Button Name="undoButton" Header="Undo" Padding="4,4,4,0" Click="undoButton_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                    <Fluent:Button Name="redoButton" Header="Undo" Padding="4,4,4,0" Click="redoButton_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
                     <Fluent:Button Name="fillButton" Header="Fill" Padding="4,4,4,0">
                         <Fluent:Button.LargeIcon>
-                            <Image Source="Images/fill.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            <Image Source="Images/fill.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
 
                     <Fluent:Button Name="textButton" Header="Add Text" Padding="4,4,4,0">
                         <Fluent:Button.LargeIcon>
-                            <Image Source="Images/text.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            <Image Source="Images/text.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
+                
                 <!--Shapes-->
-                <Fluent:RibbonGroupBox Header="Shapes" Width="250">
+                <Fluent:RibbonGroupBox Header="Shapes">
                     <!--Add shapes' icon here-->
-                    <ListView Name="iconListView" Width="200" Height="60" Margin="20,12,0,0" SelectionChanged="iconListView_SelectionChanged"
+                    <ListView Name="iconListView" Width="200" Height="60" Margin="8,8,8,0" SelectionChanged="iconListView_SelectionChanged"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -127,7 +131,7 @@
                 </Fluent:RibbonGroupBox>
                 
                 <!--Size-->
-                <Fluent:RibbonGroupBox Width="250">
+                <Fluent:RibbonGroupBox Header="Style">
                     <StackPanel Orientation="Vertical" Margin="4,4,4,0" HorizontalAlignment="Center">
                         <Image Source="Images/thickness.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"
                                Width="40" HorizontalAlignment="Center"/>
