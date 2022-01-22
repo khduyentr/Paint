@@ -33,23 +33,24 @@ namespace Paint
         /// for global variables
         /// </summary>
 
-        bool _isDrawing = false;
-        bool _isSaved = false;
+        private bool _isDrawing = false;
+        private bool _isSaved = false;
 
-        List<IShape> _shapes = new List<IShape>();
-        IShape _preview = null;
-        string _selectedShapeName = "";
+        private List<IShape> _shapes = new List<IShape>();
+        private Stack<IShape> _buffer = new Stack<IShape>();
+        private IShape _preview = null;
+        private string _selectedShapeName = "";
 
-        //Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
-        List<IShape> allShape = new List<IShape>();
-        ShapeFactory _factory = ShapeFactory.Instance;
+        // Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
+        private List<IShape> allShape = new List<IShape>();
+        private ShapeFactory _factory = ShapeFactory.Instance;
 
-        // property of a shape
-        static int _currentThickness = 1;
-        static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
-        static new DoubleCollection _currentDash = null;
+        // Shapes properties
+        private static int _currentThickness = 1;
+        private static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
+        private static DoubleCollection _currentDash = null;
 
-        string _backgroundImage = "";
+        private string _backgroundImagePath = "";
 
         /// <summary>
         /// Implement interface and child class
@@ -600,7 +601,6 @@ namespace Paint
             }
         }
 
-
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -648,7 +648,7 @@ namespace Paint
 
                 // experience 
                 StringBuilder builder = new StringBuilder();
-                builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImage}");
+                builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
                 string content = builder.ToString();
 
 
@@ -671,13 +671,13 @@ namespace Paint
                 //reset
                 ResetToDefault();
                 return;
-            }    
+            }
             else if (MessageBoxResult.Cancel == result)
             {
                 return;
-            }    
+            }
 
-            
+
         }
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
@@ -706,7 +706,7 @@ namespace Paint
                 };
 
                 _shapes.Clear();
-                _backgroundImage = background;
+                _backgroundImagePath = background;
                 drawingArea.Children.Clear();
 
                 List<IShape> containers = JsonConvert.DeserializeObject<List<IShape>>(json, settings);
@@ -714,10 +714,10 @@ namespace Paint
                 foreach (var item in containers)
                     _shapes.Add(item);
 
-                if (_backgroundImage.Length != 0)
+                if (_backgroundImagePath.Length != 0)
                 {
                     ImageBrush brush = new ImageBrush();
-                    brush.ImageSource = new BitmapImage(new Uri(_backgroundImage, UriKind.Absolute));
+                    brush.ImageSource = new BitmapImage(new Uri(_backgroundImagePath, UriKind.Absolute));
                     drawingArea.Background = brush;
                 }
 
@@ -730,7 +730,7 @@ namespace Paint
                 drawingArea.Children.Add(element);
             }
 
-            
+
         }
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
@@ -746,7 +746,7 @@ namespace Paint
 
             // experience 
             StringBuilder builder = new StringBuilder();
-            builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImage}");
+            builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImagePath}");
             string content = builder.ToString();
 
 
@@ -774,7 +774,7 @@ namespace Paint
 
             //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-            
+
 
 
             switch (extension)
@@ -807,7 +807,7 @@ namespace Paint
                     }
                     break;
                 case "bmp":
-                    
+
                     BmpBitmapEncoder bitmapEncoder = new BmpBitmapEncoder();
                     bitmapEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
 
@@ -859,7 +859,6 @@ namespace Paint
             Point pos = e.GetPosition(drawingArea);
             _preview.HandleEnd(pos.X, pos.Y);
 
-
             // add to shapes list & save it color + thickness
             _shapes.Add(_preview);
             _preview.Brush = _currentColor;
@@ -869,23 +868,12 @@ namespace Paint
             // draw new thing -> isSaved = false
             _isSaved = false;
 
-
             // move to new preview 
-
-
             _preview = _factory.Create(_selectedShapeName);
 
             // re draw everything
 
-            // del all first
-            drawingArea.Children.Clear();
-
-            // re draw all shape in shape list
-            foreach (var shape in _shapes)
-            {
-                var element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
-                drawingArea.Children.Add(element);
-            }
+            redrawCanvas();
         }
 
         private void sizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -979,7 +967,7 @@ namespace Paint
             {
                 string path = dialog.FileName;
                 string extension = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[1];
-                
+
                 SaveCanvasToImage(drawingArea, path, extension);
             }
 
@@ -1017,7 +1005,7 @@ namespace Paint
             {
                 string path = dialog.FileName;
 
-                _backgroundImage = path;
+                _backgroundImagePath = path;
 
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri(path, UriKind.Absolute));
@@ -1039,7 +1027,7 @@ namespace Paint
             _currentColor = new SolidColorBrush(Colors.Red);
             _currentDash = null;
 
-            _backgroundImage = "";
+            _backgroundImagePath = "";
 
             dashComboBox.SelectedIndex = 0;
             sizeComboBox.SelectedIndex = 0;
@@ -1050,12 +1038,39 @@ namespace Paint
 
         private void undoButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_shapes.Count == 0)
+                return;
+            if (_shapes.Count == 0 && _buffer.Count == 0)
+                return;
 
+            // Push last shape into buffer and remove it from final list, then re-draw canvas
+            int lastIndex = _shapes.Count - 1;
+            _buffer.Push(_shapes[lastIndex]);
+            _shapes.RemoveAt(lastIndex);
+
+            redrawCanvas();
         }
 
         private void redoButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_buffer.Count == 0)
+                return;
+            if (_shapes.Count == 0 && _buffer.Count == 0)
+                return;
 
+            // Pop the last shape from buffer and add it to final list, then re-draw canvas
+            _shapes.Add(_buffer.Pop());
+            redrawCanvas();
+        }
+
+        private void redrawCanvas()
+        {
+            drawingArea.Children.Clear();
+            foreach (var shape in _shapes)
+            {
+                var element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
+                drawingArea.Children.Add(element);
+            }
         }
     }
 }
