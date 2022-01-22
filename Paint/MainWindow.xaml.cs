@@ -34,17 +34,16 @@ namespace Paint
         /// </summary>
 
         bool _isDrawing = false;
-        bool _isSaved = false;
 
         List<IShape> _shapes = new List<IShape>();
         IShape _preview = null;
         string _selectedShapeName = "";
 
-        // Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
+        //Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
         List<IShape> allShape = new List<IShape>();
         ShapeFactory _factory = ShapeFactory.Instance;
 
-        // Shapes properties
+        // property of a shape
         static int _currentThickness = 1;
         static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
         static new DoubleCollection _currentDash = null;
@@ -458,7 +457,6 @@ namespace Paint
                     Stroke = brush,
                     StrokeDashArray = dash
 
-
                 };
 
                 if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)
@@ -591,6 +589,17 @@ namespace Paint
         }
 
 
+        private void editColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
+
+            if (colorPicker.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                _currentColor = new SolidColorBrush(Color.FromRgb(colorPicker.Color.R, colorPicker.Color.G, colorPicker.Color.B));
+            }
+        }
+
+
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -610,44 +619,7 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
-            // If nothing was drawn before, simply return
-            if (_shapes.Count == 0)
-                return;
-            // If the current file was saved before, reset everything back to default
-            if (_isSaved)
-            {
-                resetToDefault();
-                return;
-            }
-            
-            // If current file wasn't saved aka _isSaved is false, display a dialog
-            var result = MessageBox.Show("Do you want to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
-            if (MessageBoxResult.Yes == result)
-            {
-                var settings = new JsonSerializerSettings()
-                {
-                    TypeNameHandling = TypeNameHandling.Objects
-                };
-                var serializedShapeList = JsonConvert.SerializeObject(_shapes, settings);
 
-                var dialog = new System.Windows.Forms.SaveFileDialog();
-                dialog.Filter = "JSON (*.json)|*.json";
-
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    string path = dialog.FileName;
-                    File.WriteAllText(path, serializedShapeList);
-                }
-                resetToDefault();
-            }
-            else if (MessageBoxResult.No == result)
-            {
-                resetToDefault();
-            } 
-            else if (MessageBoxResult.Cancel == result)
-            {
-                return;
-            }
         }
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
@@ -726,11 +698,7 @@ namespace Paint
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = dialog.FileName;
-
                 File.WriteAllText(path, content);
-                //File.WriteAllText(path, serializedShapeList);
-                _isSaved = true;
-
             }
         }
 
@@ -747,7 +715,7 @@ namespace Paint
 
             //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-
+            
 
 
             switch (extension)
@@ -780,7 +748,7 @@ namespace Paint
                     }
                     break;
                 case "bmp":
-
+                    
                     BmpBitmapEncoder bitmapEncoder = new BmpBitmapEncoder();
                     bitmapEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
 
@@ -881,16 +849,6 @@ namespace Paint
             }
         }
 
-        private void editColorButton_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.ColorDialog colorPicker = new System.Windows.Forms.ColorDialog();
-
-            if (colorPicker.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                _currentColor = new SolidColorBrush(Color.FromRgb(colorPicker.Color.R, colorPicker.Color.G, colorPicker.Color.B));
-            }
-        }
-
         private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
         {
             _currentColor = new SolidColorBrush(Color.FromRgb(0, 0, 0));
@@ -959,7 +917,7 @@ namespace Paint
             {
                 string path = dialog.FileName;
                 string extension = path.Substring(path.LastIndexOf('\\') + 1).Split('.')[1];
-
+                
                 SaveCanvasToImage(drawingArea, path, extension);
             }
 
@@ -1003,15 +961,6 @@ namespace Paint
                 brush.ImageSource = new BitmapImage(new Uri(path, UriKind.Absolute));
                 drawingArea.Background = brush;
             }
-
-        private void resetToDefault()
-        {
-            _currentThickness = 1;
-            _currentColor = new SolidColorBrush(Colors.Red);
-            _shapes.Clear();
-            drawingArea.Children.Clear();
-            sizeComboBox.SelectedIndex = 0;
-            _isSaved = false;
         }
     }
 }
