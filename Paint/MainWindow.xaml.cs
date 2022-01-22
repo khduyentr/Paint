@@ -34,6 +34,7 @@ namespace Paint
         /// </summary>
 
         bool _isDrawing = false;
+        bool _isSaved = false;
 
         List<IShape> _shapes = new List<IShape>();
         IShape _preview = null;
@@ -619,7 +620,64 @@ namespace Paint
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
         {
+            //if (_shapes.Count == 0)
+            //{
+            //    MessageBox.Show("This canvas is empty");
+            //    return;
+            //}    
 
+            //if (_isSaved)
+            //{
+            //    ResetToDefault();
+            //    return;
+            //}
+
+            var result = MessageBox.Show("Do you want to save current file?", "Unsaved changes detected", MessageBoxButton.YesNoCancel);
+
+            if (MessageBoxResult.Yes == result)
+            {
+                // save then reset
+
+                // save 
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Objects
+                };
+
+                var serializedShapeList = JsonConvert.SerializeObject(_shapes, settings);
+
+                // experience 
+                StringBuilder builder = new StringBuilder();
+                builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImage}");
+                string content = builder.ToString();
+
+
+                var dialog = new System.Windows.Forms.SaveFileDialog();
+
+                dialog.Filter = "JSON (*.json)|*.json";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string path = dialog.FileName;
+                    File.WriteAllText(path, content);
+                }
+
+                // reset
+                ResetToDefault();
+                _isSaved = true;
+            }
+            else if (MessageBoxResult.No == result)
+            {
+                //reset
+                ResetToDefault();
+                return;
+            }    
+            else if (MessageBoxResult.Cancel == result)
+            {
+                return;
+            }    
+
+            
         }
 
         private void openFileButton_Click(object sender, RoutedEventArgs e)
@@ -635,8 +693,10 @@ namespace Paint
 
                 string[] content = File.ReadAllLines(path);
 
+                string background = "";
                 string json = content[0];
-                string background = content[1];
+                if (content.Length > 1)
+                    background = content[1];
                 //string json = File.ReadAllText(path);
 
 
@@ -647,6 +707,7 @@ namespace Paint
 
                 _shapes.Clear();
                 _backgroundImage = background;
+                drawingArea.Children.Clear();
 
                 List<IShape> containers = JsonConvert.DeserializeObject<List<IShape>>(json, settings);
 
@@ -674,6 +735,7 @@ namespace Paint
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
+            _isSaved = true;
 
             var settings = new JsonSerializerSettings()
             {
@@ -686,9 +748,6 @@ namespace Paint
             StringBuilder builder = new StringBuilder();
             builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImage}");
             string content = builder.ToString();
-            //string path = @"D:\test_bg.json";
-            //File.WriteAllText(path, builder.ToString());
-            //
 
 
             var dialog = new System.Windows.Forms.SaveFileDialog();
@@ -806,6 +865,9 @@ namespace Paint
             _preview.Brush = _currentColor;
             _preview.Thickness = _currentThickness;
             _preview.StrokeDash = _currentDash;
+
+            // draw new thing -> isSaved = false
+            _isSaved = false;
 
 
             // move to new preview 
@@ -961,6 +1023,26 @@ namespace Paint
                 brush.ImageSource = new BitmapImage(new Uri(path, UriKind.Absolute));
                 drawingArea.Background = brush;
             }
+        }
+
+        private void ResetToDefault()
+        {
+            //_isSaved = false; //but there is no time it is true ?
+            _isDrawing = false;
+
+            _shapes.Clear();
+
+            _selectedShapeName = allShape[0].Name;
+            _preview = _factory.Create(_selectedShapeName);
+
+            _currentThickness = 1;
+            _currentColor = new SolidColorBrush(Colors.Red);
+            _currentDash = null;
+
+            _backgroundImage = "";
+
+            drawingArea.Children.Clear();
+            drawingArea.Background = new SolidColorBrush(Colors.White);
         }
     }
 }
