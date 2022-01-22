@@ -48,6 +48,8 @@ namespace Paint
         static SolidColorBrush _currentColor = new SolidColorBrush(Colors.Red);
         static new DoubleCollection _currentDash = null;
 
+        string _backgroundImage = "";
+
         /// <summary>
         /// Implement interface and child class
         /// </summary>
@@ -631,7 +633,11 @@ namespace Paint
             {
                 string path = dialog.FileName;
 
-                string json = File.ReadAllText(path);
+                string[] content = File.ReadAllLines(path);
+
+                string json = content[0];
+                string background = content[1];
+                //string json = File.ReadAllText(path);
 
 
                 var settings = new JsonSerializerSettings()
@@ -640,10 +646,21 @@ namespace Paint
                 };
 
                 _shapes.Clear();
+                _backgroundImage = background;
+
                 List<IShape> containers = JsonConvert.DeserializeObject<List<IShape>>(json, settings);
 
                 foreach (var item in containers)
                     _shapes.Add(item);
+
+                if (_backgroundImage.Length != 0)
+                {
+                    ImageBrush brush = new ImageBrush();
+                    brush.ImageSource = new BitmapImage(new Uri(_backgroundImage, UriKind.Absolute));
+                    drawingArea.Background = brush;
+                }
+
+                //MessageBox.Show($"{background}");
             }
 
             foreach (var shape in _shapes)
@@ -651,6 +668,8 @@ namespace Paint
                 var element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
                 drawingArea.Children.Add(element);
             }
+
+            
         }
 
         private void saveFileButton_Click(object sender, RoutedEventArgs e)
@@ -663,6 +682,14 @@ namespace Paint
 
             var serializedShapeList = JsonConvert.SerializeObject(_shapes, settings);
 
+            // experience 
+            StringBuilder builder = new StringBuilder();
+            builder.Append(serializedShapeList).Append("\n").Append($"{_backgroundImage}");
+            string content = builder.ToString();
+            //string path = @"D:\test_bg.json";
+            //File.WriteAllText(path, builder.ToString());
+            //
+
 
             var dialog = new System.Windows.Forms.SaveFileDialog();
 
@@ -671,7 +698,7 @@ namespace Paint
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = dialog.FileName;
-                File.WriteAllText(path, serializedShapeList);
+                File.WriteAllText(path, content);
             }
         }
 
@@ -927,6 +954,9 @@ namespace Paint
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = dialog.FileName;
+
+                _backgroundImage = path;
+
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri(path, UriKind.Absolute));
                 drawingArea.Background = brush;
