@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Contract;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,23 +57,6 @@ namespace Paint
         /// Implement interface and child class
         /// </summary>
 
-        interface IShape
-        {
-            string Name { get; }
-            string Icon { get; }
-
-            SolidColorBrush Brush { get; set; }
-            int Thickness { get; set; }
-
-            DoubleCollection StrokeDash { get; set; }
-
-            void HandleStart(double x, double y);
-            void HandleEnd(double x, double y);
-            IShape Clone();
-
-
-            UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash);
-        }
 
         class ShapeFactory
         {
@@ -82,7 +66,7 @@ namespace Paint
             {
                 _prototypes = new Dictionary<string, IShape>();
 
-                IShape line = new Line2D();
+                /*IShape line = new Line2D();
                 IShape rect = new Rectangle2D();
                 IShape ellipse = new Ellipse2D();
                 IShape circle = new Circle2D();
@@ -92,30 +76,30 @@ namespace Paint
                 _prototypes.Add(rect.Name, rect);
                 _prototypes.Add(ellipse.Name, ellipse);
                 _prototypes.Add(circle.Name, circle);
-                _prototypes.Add(square.Name, square);
+                _prototypes.Add(square.Name, square);*/
 
 
 
                 // Uncomment this block of code later to load dll file
 
-                /*string exePath = Assembly.GetExecutingAssembly().Location;
+                string exePath = Assembly.GetExecutingAssembly().Location;
                 string folder = System.IO.Path.GetDirectoryName(exePath);
                 var fis = new DirectoryInfo(folder).GetFiles("*.dll");
 
-                foreach (var f in fis) // Lần lượt duyệt qua các file dll
+                foreach (var f in fis)
                 {
                     var assembly = Assembly.LoadFile(f.FullName);
                     var types = assembly.GetTypes();
 
-                    foreach (var t in types)
+                    foreach (var typr in types)
                     {
-                        if (t.IsClass && typeof(IShape).IsAssignableFrom(t))
+                        if (typr.IsClass && typeof(IShape).IsAssignableFrom(typr))
                         {
-                            IShape shape = (IShape)Activator.CreateInstance(t);
+                            IShape shape = (IShape)Activator.CreateInstance(typr);
                             _prototypes.Add(shape.Name, shape);
                         }
                     }
-                }*/
+                }
 
             }
 
@@ -145,253 +129,6 @@ namespace Paint
             }
 
 
-        }
-
-        class Point2D : IShape
-        {
-            public double X { get; set; }
-            public double Y { get; set; }
-
-            public string Icon { get; }
-
-            public SolidColorBrush Brush { get; set; }
-            public DoubleCollection StrokeDash { get; set; }
-            public string Name => "Point";
-
-            public int Thickness { get; set; }
-
-            public void HandleStart(double x, double y)
-            {
-                X = x;
-                Y = y;
-            }
-
-            public void HandleEnd(double x, double y)
-            {
-                X = x;
-                Y = y;
-            }
-
-
-            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
-            {
-                Line line = new Line()
-                {
-                    X1 = X,
-                    Y1 = Y,
-                    X2 = X,
-                    Y2 = Y,
-                    StrokeThickness = thickness,
-                    Stroke = brush,
-                    StrokeDashArray = dash
-                };
-
-
-                return line;
-            }
-
-
-            public IShape Clone()
-            {
-                return new Point2D();
-            }
-        }
-
-        class Line2D : IShape
-        {
-
-            private Point2D _start = new Point2D();
-            private Point2D _end = new Point2D();
-
-            public Point2D Start   // property
-            {
-                get { return _start; }   // get method
-                set { _start = value; }  // set method
-            }
-
-            public Point2D End   // property
-            {
-                get { return _end; }   // get method
-                set { _end = value; }  // set method
-            }
-
-            public DoubleCollection StrokeDash { get; set; }
-
-            public SolidColorBrush Brush { get; set; }
-            public string Name => "Line";
-            public string Icon => "Images/line.png";
-
-            public int Thickness { get; set; }
-
-            public void HandleStart(double x, double y)
-            {
-                _start = new Point2D() { X = x, Y = y };
-            }
-
-            public void HandleEnd(double x, double y)
-            {
-                _end = new Point2D() { X = x, Y = y };
-            }
-
-            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
-            {
-                Line line = new Line()
-                {
-                    X1 = _start.X,
-                    Y1 = _start.Y,
-                    X2 = _end.X,
-                    Y2 = _end.Y,
-                    StrokeThickness = thickness,
-                    Stroke = brush,
-                    StrokeDashArray = dash
-
-                };
-                return line;
-            }
-
-            public IShape Clone()
-            {
-                return new Line2D();
-            }
-        }
-
-        class Rectangle2D : IShape
-        {
-            private Point2D _leftTop = new Point2D();
-            private Point2D _rightBottom = new Point2D();
-
-            public Point2D LeftTop   // property
-            {
-                get { return _leftTop; }   // get method
-                set { _leftTop = value; }  // set method
-            }
-
-            public Point2D RightBottom
-            {
-                get { return _rightBottom; }   // get method
-                set { _rightBottom = value; }  // set method
-            }
-            public SolidColorBrush Brush { get; set; }
-
-            public DoubleCollection StrokeDash { get; set; }
-            public string Icon => "Images/rectangle.png";
-            public string Name => "Rectangle";
-
-            public int Thickness { get; set; }
-
-            public void HandleStart(double x, double y)
-            {
-                _leftTop = new Point2D() { X = x, Y = y };
-            }
-
-            public void HandleEnd(double x, double y)
-            {
-                _rightBottom = new Point2D() { X = x, Y = y };
-            }
-
-            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
-
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var rect = new Rectangle()
-                {
-                    Width = width,
-                    Height = height,
-
-                    StrokeThickness = thickness,
-                    Stroke = brush,
-                    StrokeDashArray = dash
-                };
-
-                Canvas.SetLeft(rect, left);
-                Canvas.SetTop(rect, top);
-
-                return rect;
-            }
-
-            public IShape Clone()
-            {
-                return new Rectangle2D();
-            }
-        }
-
-        class Ellipse2D : IShape
-        {
-            private Point2D _leftTop = new Point2D();
-            private Point2D _rightBottom = new Point2D();
-
-            public DoubleCollection StrokeDash { get; set; }
-
-            public Point2D LeftTop   // property
-            {
-                get { return _leftTop; }   // get method
-                set { _leftTop = value; }  // set method
-            }
-
-            public Point2D RightBottom
-            {
-                get { return _rightBottom; }   // get method
-                set { _rightBottom = value; }  // set method
-            }
-            public SolidColorBrush Brush { get; set; }
-            public string Name => "Ellipse";
-            public string Icon => "Images/ellipse.png";
-
-            public int Thickness { get; set; }
-
-            public void HandleStart(double x, double y)
-            {
-                _leftTop.X = x;
-                _leftTop.Y = y;
-            }
-
-            public void HandleEnd(double x, double y)
-            {
-                _rightBottom.X = x;
-                _rightBottom.Y = y;
-            }
-
-
-
-            public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
-            {
-                var left = Math.Min(_rightBottom.X, _leftTop.X);
-                var top = Math.Min(_rightBottom.Y, _leftTop.Y);
-
-                var right = Math.Max(_rightBottom.X, _leftTop.X);
-                var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-                var width = right - left;
-                var height = bottom - top;
-
-                var ellipse = new Ellipse()
-                {
-                    Width = width,
-                    Height = height,
-                    Stroke = brush,
-
-                    StrokeThickness = thickness,
-                    StrokeDashArray = dash
-
-                };
-
-                Canvas.SetLeft(ellipse, left);
-                Canvas.SetTop(ellipse, top);
-
-                return ellipse;
-            }
-
-            public IShape Clone()
-            {
-                return new Ellipse2D();
-            }
         }
 
         class Circle2D : IShape
@@ -630,7 +367,7 @@ namespace Paint
                 // MessageBox.Show("This canvas is empty");
                 return;
             }
-            
+
 
             if (_isSaved)
             {

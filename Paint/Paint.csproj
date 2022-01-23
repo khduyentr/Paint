@@ -41,6 +41,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contract\Contract.csproj" />
+    <ProjectReference Include="..\Line2D\Line2D.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\1px.png" />
     <Resource Include="Images\circle.png" />
     <Resource Include="Images\color_wheel.png" />
