@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rectangle2D", "Rectangle2D\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ellipse2D", "Ellipse2D\Ellipse2D.csproj", "{507A0428-8CA3-4BF7-B53F-99FFFF0855A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Square2D", "Square2D\Square2D.csproj", "{20A85C68-B7DF-40EC-9E6C-0185A8C30019}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Circle2D", "Circle2D\Circle2D.csproj", "{5D214327-92B4-4CB9-A9D0-21916DA62FC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{507A0428-8CA3-4BF7-B53F-99FFFF0855A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{507A0428-8CA3-4BF7-B53F-99FFFF0855A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{507A0428-8CA3-4BF7-B53F-99FFFF0855A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A85C68-B7DF-40EC-9E6C-0185A8C30019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A85C68-B7DF-40EC-9E6C-0185A8C30019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A85C68-B7DF-40EC-9E6C-0185A8C30019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A85C68-B7DF-40EC-9E6C-0185A8C30019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D214327-92B4-4CB9-A9D0-21916DA62FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D214327-92B4-4CB9-A9D0-21916DA62FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D214327-92B4-4CB9-A9D0-21916DA62FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D214327-92B4-4CB9-A9D0-21916DA62FC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
