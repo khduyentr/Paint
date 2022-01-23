@@ -86,7 +86,7 @@
                             <Image Source="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
-                    <Fluent:Button Name="redoButton" Header="Undo" Padding="4,4,4,0" Click="redoButton_Click">
+                    <Fluent:Button Name="redoButton" Header="Redo" Padding="4,4,4,0" Click="redoButton_Click">
                         <Fluent:Button.LargeIcon>
                             <Image Source="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>

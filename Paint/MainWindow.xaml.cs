@@ -877,7 +877,7 @@ namespace Paint
             _preview = _factory.Create(_selectedShapeName);
 
             // Re-draw the canvas
-            redrawCanvas();
+            RedrawCanvas();
         }
 
         private void sizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1052,7 +1052,7 @@ namespace Paint
             _buffer.Push(_shapes[lastIndex]);
             _shapes.RemoveAt(lastIndex);
 
-            redrawCanvas();
+            RedrawCanvas();
         }
 
         private void redoButton_Click(object sender, RoutedEventArgs e)
@@ -1064,10 +1064,10 @@ namespace Paint
 
             // Pop the last shape from buffer and add it to final list, then re-draw canvas
             _shapes.Add(_buffer.Pop());
-            redrawCanvas();
+            RedrawCanvas();
         }
 
-        private void redrawCanvas()
+        private void RedrawCanvas()
         {
             drawingArea.Children.Clear();
             foreach (var shape in _shapes)
