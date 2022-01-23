@@ -42,7 +42,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contract\Contract.csproj" />
-    <ProjectReference Include="..\Line2D\Line2D.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -84,18 +84,18 @@ namespace Paint
 
                 string exePath = Assembly.GetExecutingAssembly().Location;
                 string folder = System.IO.Path.GetDirectoryName(exePath);
-                var fis = new DirectoryInfo(folder).GetFiles("*.dll");
+                var fis = new DirectoryInfo(folder).GetFiles("shapes/*.dll");
 
                 foreach (var f in fis)
                 {
                     var assembly = Assembly.LoadFile(f.FullName);
                     var types = assembly.GetTypes();
 
-                    foreach (var typr in types)
+                    foreach (var type in types)
                     {
-                        if (typr.IsClass && typeof(IShape).IsAssignableFrom(typr))
+                        if (type.IsClass && typeof(IShape).IsAssignableFrom(type))
                         {
-                            IShape shape = (IShape)Activator.CreateInstance(typr);
+                            IShape shape = (IShape)Activator.CreateInstance(type);
                             _prototypes.Add(shape.Name, shape);
                         }
                     }
