@@ -35,12 +35,20 @@ namespace Paint
         /// </summary>
 
         private bool _isDrawing = false;
+        private bool _isEditMode = false;
         private bool _isSaved = false;
 
         private List<IShape> _shapes = new List<IShape>();
         private Stack<IShape> _buffer = new Stack<IShape>();
         private IShape _preview = null;
         private string _selectedShapeName = "";
+
+        // Edit more variables
+        private int _chosedShape = -1;
+        private double lastClickPosX = -1;
+        private double lastClickPosY = -1;
+        private double editPreviousX = -1;
+        private double editPreviousY = -1;
 
         // Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
         private List<IShape> allShape = new List<IShape>();
@@ -84,7 +92,15 @@ namespace Paint
 
                 string exePath = Assembly.GetExecutingAssembly().Location;
                 string folder = System.IO.Path.GetDirectoryName(exePath);
+
+                //check if shape folder exist
+                
+                if (!Directory.Exists(folder + "/shapes"))
+                    return;
+
                 var fis = new DirectoryInfo(folder).GetFiles("shapes/*.dll");
+
+                Console.Write(fis.Count());
 
                 foreach (var f in fis)
                 {
@@ -127,8 +143,6 @@ namespace Paint
                     shape = _prototypes[shapeName].Clone();
                 return shape;
             }
-
-
         }
 
         private void editColorButton_Click(object sender, RoutedEventArgs e)
@@ -143,7 +157,6 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             foreach (var item in _factory.GetDictionary())
             {
                 var shape = item.Value as IShape;
@@ -152,10 +165,11 @@ namespace Paint
 
             iconListView.ItemsSource = allShape;
 
+            if (this.allShape.Count == 0)
+                return;
+
             _selectedShapeName = allShape[0].Name;
-
             _preview = _factory.Create(_selectedShapeName);
-
         }
 
         private void createNewButton_Click(object sender, RoutedEventArgs e)
@@ -368,6 +382,20 @@ namespace Paint
 
         private void drawingArea_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (this.allShape.Count == 0)
+                return;
+
+            if (this._isEditMode)
+			{
+                if(Mouse.RightButton == MouseButtonState.Pressed)
+			    {
+                    _chosedShape = -1;
+                    return;
+			    }
+
+                return;
+			}
+
             _isDrawing = true;
             Point pos = e.GetPosition(drawingArea);
 
@@ -376,6 +404,45 @@ namespace Paint
 
         private void drawingArea_MouseMove(object sender, MouseEventArgs e)
         {
+            if (this._isEditMode)
+			{
+                if (_chosedShape == -1 || _chosedShape >= _shapes.Count)
+                    return;
+
+                if(Mouse.LeftButton != MouseButtonState.Pressed)
+                    return;
+
+                CShape shape = (CShape)_shapes[_chosedShape];
+
+                Point currentPos = e.GetPosition(drawingArea);
+
+                if (!shape.isHovering(currentPos.X, currentPos.Y))
+                    return;
+
+                double dx, dy;
+
+                if(editPreviousX == -1 || editPreviousY == -1)
+				{
+                    editPreviousX = currentPos.X;
+                    editPreviousY = currentPos.Y;
+                    return;
+				}
+
+                dx = currentPos.X - editPreviousX;
+                dy = currentPos.Y - editPreviousY;
+
+                shape.LeftTop.X = shape.LeftTop.X + dx;
+                shape.LeftTop.Y = shape.LeftTop.Y + dy;
+                shape.RightBottom.X = shape.RightBottom.X + dx;
+                shape.RightBottom.Y = shape.RightBottom.Y + dy;
+
+                editPreviousX = currentPos.X;
+                editPreviousY = currentPos.Y;
+
+                RedrawCanvas();
+                return;
+			}
+
             if (_isDrawing)
             {
                 Point pos = e.GetPosition(drawingArea);
@@ -399,7 +466,29 @@ namespace Paint
 
         private void drawingArea_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (this.allShape.Count == 0)
+                return;
+
             _isDrawing = false;
+
+            if (this._isEditMode)
+			{
+                Point currentPos = e.GetPosition(drawingArea);
+                for(int i = this._shapes.Count - 1; i >= 0; i--)
+				{
+                    CShape temp = (CShape)_shapes[i];
+                    if(temp.isHovering(currentPos.X, currentPos.Y))
+					{
+                        this._chosedShape = i;
+                        break;
+					}
+				}
+
+                this.editPreviousX = -1;
+                this.editPreviousY = -1;
+
+                return;
+			}
 
             Point pos = e.GetPosition(drawingArea);
             _preview.HandleEnd(pos.X, pos.Y);
@@ -419,6 +508,45 @@ namespace Paint
             // Re-draw the canvas
             RedrawCanvas();
         }
+
+        private void drawingArea_MouseLeave(object sender, MouseEventArgs e)
+		{
+            //this._isDrawing = false;
+		}
+        private void drawingArea_MouseEnter(object sender, MouseEventArgs e)
+		{
+            if (this.allShape.Count == 0)
+                return;
+
+            if (this._isEditMode)
+                return;
+
+            if (Mouse.LeftButton != MouseButtonState.Pressed && this._isDrawing)
+			{
+                //wish there is a better solution like
+                // this.drawingArea_MouseUp(sender, e)
+                // but e is not MouseButtonEventArgs (;-;)
+                _isDrawing = false;
+
+                Point pos = e.GetPosition(drawingArea);
+                _preview.HandleEnd(pos.X, pos.Y);
+
+                // Ddd to shapes list & save it color + thickness
+                _shapes.Add(_preview);
+                _preview.Brush = _currentColor;
+                _preview.Thickness = _currentThickness;
+                _preview.StrokeDash = _currentDash;
+
+                // Draw new thing -> isSaved = false
+                _isSaved = false;
+
+                // Move to new preview 
+                _preview = _factory.Create(_selectedShapeName);
+
+                // Re-draw the canvas
+                RedrawCanvas();
+			}
+		}
 
         private void sizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -443,7 +571,9 @@ namespace Paint
             }
         }
 
-        private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
+		#region color button
+
+		private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
         {
             _currentColor = new SolidColorBrush(Color.FromRgb(0, 0, 0));
         }
@@ -493,8 +623,13 @@ namespace Paint
             _currentColor = new SolidColorBrush(Color.FromRgb(160, 82, 45));
         }
 
-        private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		#endregion 
+
+		private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (this.allShape.Count == 0)
+                return;
+
             var index = iconListView.SelectedIndex;
 
             _selectedShapeName = allShape[index].Name;
@@ -559,6 +694,9 @@ namespace Paint
 
         private void ResetToDefault()
         {
+            if (this.allShape.Count == 0)
+                return;
+
             _isSaved = false;
             _isDrawing = false;
 
@@ -616,5 +754,15 @@ namespace Paint
                 drawingArea.Children.Add(element);
             }
         }
-    }
+
+        //Tools tab event
+
+		private void EditMode_Click(object sender, RoutedEventArgs e)
+		{
+            this._isEditMode = !this._isEditMode;
+
+            if (!this._isEditMode)
+                this._chosedShape = -1;
+		}
+	}
 }

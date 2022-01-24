@@ -2,30 +2,18 @@ using Contract;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Circle2D
 {
-    public class Circle2D : IShape
+    public class Circle2D : CShape, IShape
     {
-
-        private Point2D _leftTop = new Point2D();
-        private Point2D _rightBottom = new Point2D();
 
         public DoubleCollection StrokeDash { get; set; }
 
-        public Point2D LeftTop   // property
-        {
-            get { return _leftTop; }   // get method
-            set { _leftTop = value; }  // set method
-        }
-
-        public Point2D RightBottom
-        {
-            get { return _rightBottom; }   // get method
-            set { _rightBottom = value; }  // set method
-        }
+        
         public SolidColorBrush Brush { get; set; }
         public string Name => "Circle";
         public string Icon => "Images/circle.png";
@@ -70,8 +58,7 @@ namespace Circle2D
                 Height = height,
                 StrokeThickness = thickness,
                 Stroke = brush,
-                StrokeDashArray = dash
-
+                StrokeDashArray = dash,
             };
 
             if (_rightBottom.X > _leftTop.X && _rightBottom.Y > _leftTop.Y)

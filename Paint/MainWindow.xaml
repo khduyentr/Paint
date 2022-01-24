@@ -60,6 +60,12 @@
                 <!--Clipboard-->
                 <Fluent:RibbonGroupBox Header="Clipboard">
                     <StackPanel Orientation="Horizontal">
+                        <Fluent:Button Name="EditMode" Header="Edit Mode" Padding="4,4,4,0" Click="EditMode_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
                         <Fluent:Button Name="pasteButton" Header="Paste" Padding="4,4,4,0">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
@@ -168,7 +174,8 @@
                         </Fluent:ComboBox>
                     </StackPanel>
                     <Fluent:DropDownButton Name="chooseThickness" Header="Thickness" 
-                                           Icon="Images/thickness.png" LargeIcon="Images/thickness.png" >
+                                           Icon="Images/thickness.png" LargeIcon="Images/thickness.png" Height="68" VerticalAlignment="Top"
+										   >
                         <Fluent:Gallery Name="chooseThicknessMenu" MaxItemsInRow="1">
                             <StackPanel Orientation="Horizontal">
                                 <Border Width="40" Height="1" BorderBrush="Black" BorderThickness="1"/>
@@ -178,7 +185,7 @@
                                 <Border Width="40" Height="2" BorderBrush="Black" BorderThickness="2"/>
                                 <Label Content="2 px"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" >
                                 <Border Width="40" Height="3" BorderBrush="Black" BorderThickness="3"/>
                                 <Label Content="3 px"/>
                             </StackPanel>
@@ -331,9 +338,9 @@
 
         <!--Drawing area-->
         <Grid>
-            <Canvas Name="drawingArea" Background="White" Height="550" Width="1250"/>
-            <Border Background="Transparent" MouseDown="drawingArea_MouseDown" MouseUp="drawingArea_MouseUp"
-                MouseMove="drawingArea_MouseMove"/>
-        </Grid>
+            <Border Background="Transparent" IsHitTestVisible="True" MouseDown="drawingArea_MouseDown" MouseUp="drawingArea_MouseUp"
+                MouseMove="drawingArea_MouseMove" MouseEnter="drawingArea_MouseEnter" MouseLeave="drawingArea_MouseLeave"/>
+            <Canvas Name="drawingArea" IsHitTestVisible="False" ClipToBounds="True" Background="White" Height="550" Width="1250"/>
+		</Grid>
     </StackPanel>
 </Fluent:RibbonWindow>

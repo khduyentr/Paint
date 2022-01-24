@@ -19,8 +19,13 @@ namespace Contract
         public SolidColorBrush Brush { get; set; }
         public DoubleCollection StrokeDash { get; set; }
         public string Name => "Point";
-
         public int Thickness { get; set; }
+
+        public bool isHovering(double x, double y)
+		{
+            return false;
+		}
+      
 
         public void HandleStart(double x, double y)
         {

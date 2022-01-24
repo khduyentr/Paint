@@ -9,6 +9,7 @@ namespace Ellipse2D
 {
     public class Ellipse2D : IShape
     {
+
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
 
