@@ -49,6 +49,7 @@ namespace Paint
         private double lastClickPosY = -1;
         private double editPreviousX = -1;
         private double editPreviousY = -1;
+        private List<controlPoint> _controlPoints = new List<controlPoint>();
 
         // Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
         private List<IShape> allShape = new List<IShape>();
@@ -390,6 +391,7 @@ namespace Paint
                 if(Mouse.RightButton == MouseButtonState.Pressed)
 			    {
                     _chosedShape = -1;
+                    RedrawCanvas();
                     return;
 			    }
 
@@ -404,6 +406,57 @@ namespace Paint
 
         private void drawingArea_MouseMove(object sender, MouseEventArgs e)
         {
+
+            //mouse change
+            bool isChange = false;
+            if (_chosedShape != -1 && _chosedShape < _shapes.Count)
+			{
+
+                CShape shape1 = (CShape)_shapes[_chosedShape];
+                Point currentPos1 = e.GetPosition(drawingArea);
+                for(int i = 0; i < _controlPoints.Count; i++)
+                {
+                    if (_controlPoints[i].isHovering(shape1.getRotateAngle(), currentPos1.X, currentPos1.Y))
+                    {
+                        switch(_controlPoints[i].edge)
+						{
+                            case "topleft" or "bottomright":
+								{
+                                    Mouse.OverrideCursor = Cursors.SizeNWSE;
+                                    break;
+								}
+                            case "topright" or "bottomleft":
+								{
+                                    Mouse.OverrideCursor = Cursors.SizeNESW;
+                                    break;
+								}
+                            case "top" or "bottom":
+								{
+                                    Mouse.OverrideCursor = Cursors.SizeNS;
+                                    break;
+								}
+                            case "left" or "right":
+								{
+                                    Mouse.OverrideCursor = Cursors.SizeWE;
+                                    break;
+								}
+                            case "rotate" or "center":
+								{
+                                    Mouse.OverrideCursor = Cursors.Hand;
+                                    break;
+								}
+						}
+                        isChange = true;
+                        break;
+                    }
+                };
+                
+                if(!isChange)
+                    Mouse.OverrideCursor = null;
+
+			}
+            
+
             if (this._isEditMode)
 			{
                 if (_chosedShape == -1 || _chosedShape >= _shapes.Count)
@@ -415,9 +468,6 @@ namespace Paint
                 CShape shape = (CShape)_shapes[_chosedShape];
 
                 Point currentPos = e.GetPosition(drawingArea);
-
-                if (!shape.isHovering(currentPos.X, currentPos.Y))
-                    return;
 
                 double dx, dy;
 
@@ -431,10 +481,125 @@ namespace Paint
                 dx = currentPos.X - editPreviousX;
                 dy = currentPos.Y - editPreviousY;
 
-                shape.LeftTop.X = shape.LeftTop.X + dx;
-                shape.LeftTop.Y = shape.LeftTop.Y + dy;
-                shape.RightBottom.X = shape.RightBottom.X + dx;
-                shape.RightBottom.Y = shape.RightBottom.Y + dy;
+                /*
+				Console.WriteLine($"dx {dx}| dy {dy}");
+				Console.WriteLine($"currentPos {currentPos.X}| {currentPos.Y}");
+				Console.WriteLine($"x {editPreviousX}| y {editPreviousY}");
+                */
+
+                //controlPoint detect part
+                _controlPoints.ForEach(ctrlPoint =>
+                {
+                    if(ctrlPoint.isHovering(shape.getRotateAngle() , currentPos.X, currentPos.Y))
+					{
+                       switch(ctrlPoint.type)
+						{
+							case "rotate":
+								{
+                                    const double RotateFactor = 180.0 / (45);
+                                    double alpha = dx + dy;
+
+                                    shape.setRotateAngle(shape.getRotateAngle() + alpha * RotateFactor);
+                                    break;
+								}
+
+                            case "diag":
+								{
+                                    Point2D handledXY = ctrlPoint.handle(shape.getRotateAngle(), dx, dy);
+
+									switch (ctrlPoint.edge)
+									{
+										case "topleft":
+                                            {
+                                                shape.LeftTop.X += handledXY.X;
+                                                shape.LeftTop.Y += handledXY.Y;
+                                                shape.RightBottom.X -= handledXY.X;
+                                                shape.RightBottom.Y -= handledXY.Y;
+                                            break;
+									        }
+                                        case "topright":
+                                            {
+                                                shape.RightBottom.X += handledXY.X;
+                                                shape.LeftTop.Y += handledXY.Y;
+                                                shape.LeftTop.X -= handledXY.X;
+                                                shape.RightBottom.Y -= handledXY.Y;
+                                            break;
+									        }
+                                        case "bottomright":
+                                            {
+                                                shape.RightBottom.X += handledXY.X;
+                                                shape.RightBottom.Y += handledXY.Y;
+                                                shape.LeftTop.X -= handledXY.X;
+                                                shape.LeftTop.Y -= handledXY.Y;
+                                            break;
+									        }
+                                        case "bottomleft":
+                                            {
+                                                shape.LeftTop.X += handledXY.X;
+                                                shape.RightBottom.Y += handledXY.Y;
+                                                shape.RightBottom.X -= handledXY.X;
+                                                shape.LeftTop.Y -= handledXY.Y;
+                                            break;
+									        }
+                                        case "right":
+                                            {
+                                                shape.RightBottom.X += handledXY.X;
+                                                shape.LeftTop.X -= handledXY.X;
+                                            break;
+									        }
+                                        case "left":
+                                            {
+                                                shape.RightBottom.X -= handledXY.X;
+                                                shape.LeftTop.X += handledXY.X;
+                                            break;
+									        }
+                                        case "top":
+                                            {
+                                                shape.RightBottom.Y -= handledXY.Y;
+                                                shape.LeftTop.Y += handledXY.Y;
+                                            break;
+									        }
+                                        case "bottom":
+                                            {
+                                                shape.RightBottom.Y += handledXY.Y;
+                                                shape.LeftTop.Y -= handledXY.Y;
+                                            break;
+									        }
+                                        case "center":
+											{
+                                                shape.LeftTop.X = shape.LeftTop.X + dx;
+                                                shape.LeftTop.Y = shape.LeftTop.Y + dy;
+                                                shape.RightBottom.X = shape.RightBottom.X + dx;
+                                                shape.RightBottom.Y = shape.RightBottom.Y + dy;
+                                                break;
+											};
+									}  
+                                    break;
+								}
+						} 
+					}
+
+                });
+
+
+                /*
+                if (!shape.isHovering(currentPos.X, currentPos.Y))
+				{
+                    //rotate factor
+                    const double RotateFactor = 180.0 / (360 * 2);
+                    double alpha = dx + dy;
+
+                    shape.setRotateAngle(shape.getRotateAngle() + alpha * RotateFactor);
+				}
+                else
+				{
+                    //shape translate
+                    shape.LeftTop.X = shape.LeftTop.X + dx;
+                    shape.LeftTop.Y = shape.LeftTop.Y + dy;
+                    shape.RightBottom.X = shape.RightBottom.X + dx;
+                    shape.RightBottom.Y = shape.RightBottom.Y + dy;
+				}
+                */
 
                 editPreviousX = currentPos.X;
                 editPreviousY = currentPos.Y;
@@ -480,6 +645,7 @@ namespace Paint
                     if(temp.isHovering(currentPos.X, currentPos.Y))
 					{
                         this._chosedShape = i;
+                        RedrawCanvas();
                         break;
 					}
 				}
@@ -699,6 +865,9 @@ namespace Paint
 
             _isSaved = false;
             _isDrawing = false;
+            _isEditMode = false;
+
+            _chosedShape = -1;
 
             _shapes.Clear();
 
@@ -753,6 +922,24 @@ namespace Paint
                 var element = shape.Draw(shape.Brush, shape.Thickness, shape.StrokeDash);
                 drawingArea.Children.Add(element);
             }
+
+            //control Point display ontop
+            if(_isEditMode && _chosedShape != -1 && _chosedShape < _shapes.Count)
+			{
+                CShape chosedShape = (CShape) this._shapes[_chosedShape];
+
+                drawingArea.Children.Add(chosedShape.controlOutline());
+
+                List<controlPoint> ctrlPoints = chosedShape.GetControlPoints();
+                this._controlPoints = ctrlPoints;
+
+                ctrlPoints.ForEach(K =>
+                {
+                    drawingArea.Children.Add(K.drawPoint(chosedShape.getRotateAngle(), chosedShape.getCenterPoint()));
+                });
+
+                //temp draw, can be comment
+			}
         }
 
         //Tools tab event
