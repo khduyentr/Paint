@@ -95,7 +95,7 @@ namespace Paint
                 string folder = System.IO.Path.GetDirectoryName(exePath);
 
                 //check if shape folder exist
-                
+
                 if (!Directory.Exists(folder + "/shapes"))
                     return;
 
@@ -387,16 +387,16 @@ namespace Paint
                 return;
 
             if (this._isEditMode)
-			{
-                if(Mouse.RightButton == MouseButtonState.Pressed)
-			    {
+            {
+                if (Mouse.RightButton == MouseButtonState.Pressed)
+                {
                     _chosedShape = -1;
                     RedrawCanvas();
                     return;
-			    }
+                }
 
                 return;
-			}
+            }
 
             _isDrawing = true;
             Point pos = e.GetPosition(drawingArea);
@@ -410,59 +410,59 @@ namespace Paint
             //mouse change
             bool isChange = false;
             if (_chosedShape != -1 && _chosedShape < _shapes.Count)
-			{
+            {
 
                 CShape shape1 = (CShape)_shapes[_chosedShape];
                 Point currentPos1 = e.GetPosition(drawingArea);
-                for(int i = 0; i < _controlPoints.Count; i++)
+                for (int i = 0; i < _controlPoints.Count; i++)
                 {
                     if (_controlPoints[i].isHovering(shape1.getRotateAngle(), currentPos1.X, currentPos1.Y))
                     {
-                        switch(_controlPoints[i].edge)
-						{
+                        switch (_controlPoints[i].edge)
+                        {
                             case "topleft" or "bottomright":
-								{
+                                {
                                     Mouse.OverrideCursor = Cursors.SizeNWSE;
                                     break;
-								}
+                                }
                             case "topright" or "bottomleft":
-								{
+                                {
                                     Mouse.OverrideCursor = Cursors.SizeNESW;
                                     break;
-								}
+                                }
                             case "top" or "bottom":
-								{
+                                {
                                     Mouse.OverrideCursor = Cursors.SizeNS;
                                     break;
-								}
+                                }
                             case "left" or "right":
-								{
+                                {
                                     Mouse.OverrideCursor = Cursors.SizeWE;
                                     break;
-								}
+                                }
                             case "rotate" or "center":
-								{
+                                {
                                     Mouse.OverrideCursor = Cursors.Hand;
                                     break;
-								}
-						}
+                                }
+                        }
                         isChange = true;
                         break;
                     }
                 };
-                
-                if(!isChange)
+
+                if (!isChange)
                     Mouse.OverrideCursor = null;
 
-			}
-            
+            }
+
 
             if (this._isEditMode)
-			{
+            {
                 if (_chosedShape == -1 || _chosedShape >= _shapes.Count)
                     return;
 
-                if(Mouse.LeftButton != MouseButtonState.Pressed)
+                if (Mouse.LeftButton != MouseButtonState.Pressed)
                     return;
 
                 CShape shape = (CShape)_shapes[_chosedShape];
@@ -471,12 +471,12 @@ namespace Paint
 
                 double dx, dy;
 
-                if(editPreviousX == -1 || editPreviousY == -1)
-				{
+                if (editPreviousX == -1 || editPreviousY == -1)
+                {
                     editPreviousX = currentPos.X;
                     editPreviousY = currentPos.Y;
                     return;
-				}
+                }
 
                 dx = currentPos.X - editPreviousX;
                 dy = currentPos.Y - editPreviousY;
@@ -490,94 +490,94 @@ namespace Paint
                 //controlPoint detect part
                 _controlPoints.ForEach(ctrlPoint =>
                 {
-                    if(ctrlPoint.isHovering(shape.getRotateAngle() , currentPos.X, currentPos.Y))
-					{
-                       switch(ctrlPoint.type)
-						{
-							case "rotate":
-								{
+                    if (ctrlPoint.isHovering(shape.getRotateAngle(), currentPos.X, currentPos.Y))
+                    {
+                        switch (ctrlPoint.type)
+                        {
+                            case "rotate":
+                                {
                                     const double RotateFactor = 180.0 / (45);
                                     double alpha = dx + dy;
 
                                     shape.setRotateAngle(shape.getRotateAngle() + alpha * RotateFactor);
                                     break;
-								}
+                                }
 
                             case "diag":
-								{
+                                {
                                     Point2D handledXY = ctrlPoint.handle(shape.getRotateAngle(), dx, dy);
 
-									switch (ctrlPoint.edge)
-									{
-										case "topleft":
+                                    switch (ctrlPoint.edge)
+                                    {
+                                        case "topleft":
                                             {
                                                 shape.LeftTop.X += handledXY.X;
                                                 shape.LeftTop.Y += handledXY.Y;
                                                 shape.RightBottom.X -= handledXY.X;
                                                 shape.RightBottom.Y -= handledXY.Y;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "topright":
                                             {
                                                 shape.RightBottom.X += handledXY.X;
                                                 shape.LeftTop.Y += handledXY.Y;
                                                 shape.LeftTop.X -= handledXY.X;
                                                 shape.RightBottom.Y -= handledXY.Y;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "bottomright":
                                             {
                                                 shape.RightBottom.X += handledXY.X;
                                                 shape.RightBottom.Y += handledXY.Y;
                                                 shape.LeftTop.X -= handledXY.X;
                                                 shape.LeftTop.Y -= handledXY.Y;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "bottomleft":
                                             {
                                                 shape.LeftTop.X += handledXY.X;
                                                 shape.RightBottom.Y += handledXY.Y;
                                                 shape.RightBottom.X -= handledXY.X;
                                                 shape.LeftTop.Y -= handledXY.Y;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "right":
                                             {
                                                 shape.RightBottom.X += handledXY.X;
                                                 shape.LeftTop.X -= handledXY.X;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "left":
                                             {
                                                 shape.RightBottom.X -= handledXY.X;
                                                 shape.LeftTop.X += handledXY.X;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "top":
                                             {
                                                 shape.RightBottom.Y -= handledXY.Y;
                                                 shape.LeftTop.Y += handledXY.Y;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "bottom":
                                             {
                                                 shape.RightBottom.Y += handledXY.Y;
                                                 shape.LeftTop.Y -= handledXY.Y;
-                                            break;
-									        }
+                                                break;
+                                            }
                                         case "center":
-											{
+                                            {
                                                 shape.LeftTop.X = shape.LeftTop.X + dx;
                                                 shape.LeftTop.Y = shape.LeftTop.Y + dy;
                                                 shape.RightBottom.X = shape.RightBottom.X + dx;
                                                 shape.RightBottom.Y = shape.RightBottom.Y + dy;
                                                 break;
-											};
-									}  
+                                            };
+                                    }
                                     break;
-								}
-						} 
-					}
+                                }
+                        }
+                    }
 
                 });
 
@@ -606,7 +606,7 @@ namespace Paint
 
                 RedrawCanvas();
                 return;
-			}
+            }
 
             if (_isDrawing)
             {
@@ -637,24 +637,24 @@ namespace Paint
             _isDrawing = false;
 
             if (this._isEditMode)
-			{
+            {
                 Point currentPos = e.GetPosition(drawingArea);
-                for(int i = this._shapes.Count - 1; i >= 0; i--)
-				{
+                for (int i = this._shapes.Count - 1; i >= 0; i--)
+                {
                     CShape temp = (CShape)_shapes[i];
-                    if(temp.isHovering(currentPos.X, currentPos.Y))
-					{
+                    if (temp.isHovering(currentPos.X, currentPos.Y))
+                    {
                         this._chosedShape = i;
                         RedrawCanvas();
                         break;
-					}
-				}
+                    }
+                }
 
                 this.editPreviousX = -1;
                 this.editPreviousY = -1;
 
                 return;
-			}
+            }
 
             Point pos = e.GetPosition(drawingArea);
             _preview.HandleEnd(pos.X, pos.Y);
@@ -676,11 +676,11 @@ namespace Paint
         }
 
         private void drawingArea_MouseLeave(object sender, MouseEventArgs e)
-		{
+        {
             //this._isDrawing = false;
-		}
+        }
         private void drawingArea_MouseEnter(object sender, MouseEventArgs e)
-		{
+        {
             if (this.allShape.Count == 0)
                 return;
 
@@ -688,7 +688,7 @@ namespace Paint
                 return;
 
             if (Mouse.LeftButton != MouseButtonState.Pressed && this._isDrawing)
-			{
+            {
                 //wish there is a better solution like
                 // this.drawingArea_MouseUp(sender, e)
                 // but e is not MouseButtonEventArgs (;-;)
@@ -711,8 +711,8 @@ namespace Paint
 
                 // Re-draw the canvas
                 RedrawCanvas();
-			}
-		}
+            }
+        }
 
         private void sizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -737,9 +737,9 @@ namespace Paint
             }
         }
 
-		#region color button
+        #region color button
 
-		private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
+        private void btnBasicBlack_Click(object sender, RoutedEventArgs e)
         {
             _currentColor = new SolidColorBrush(Color.FromRgb(0, 0, 0));
         }
@@ -789,9 +789,9 @@ namespace Paint
             _currentColor = new SolidColorBrush(Color.FromRgb(160, 82, 45));
         }
 
-		#endregion 
+        #endregion
 
-		private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void iconListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.allShape.Count == 0)
                 return;
@@ -924,9 +924,9 @@ namespace Paint
             }
 
             //control Point display ontop
-            if(_isEditMode && _chosedShape != -1 && _chosedShape < _shapes.Count)
-			{
-                CShape chosedShape = (CShape) this._shapes[_chosedShape];
+            if (_isEditMode && _chosedShape != -1 && _chosedShape < _shapes.Count)
+            {
+                CShape chosedShape = (CShape)this._shapes[_chosedShape];
 
                 drawingArea.Children.Add(chosedShape.controlOutline());
 
@@ -939,17 +939,20 @@ namespace Paint
                 });
 
                 //temp draw, can be comment
-			}
+            }
         }
 
         //Tools tab event
 
-		private void EditMode_Click(object sender, RoutedEventArgs e)
-		{
+        private void EditMode_Click(object sender, RoutedEventArgs e)
+        {
             this._isEditMode = !this._isEditMode;
+            if (_isEditMode)
+                EditMode.Header = "Edit Mode";
+            else EditMode.Header = "Draw Mode";
 
             if (!this._isEditMode)
                 this._chosedShape = -1;
-		}
-	}
+        }
+    }
 }
