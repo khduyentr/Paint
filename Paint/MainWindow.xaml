@@ -62,7 +62,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Fluent:Button Name="EditMode" Header="Edit Mode" Padding="4,4,4,0" Click="EditMode_Click">
                             <Fluent:Button.LargeIcon>
-                                <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                                <Image Source="Images/edit.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
 
