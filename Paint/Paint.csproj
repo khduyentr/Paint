@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\1px.png" />
     <None Remove="Images\circle.png" />
     <None Remove="Images\color_wheel.png" />
     <None Remove="Images\copy.png" />
     <None Remove="Images\cut.png" />
     <None Remove="Images\dash.png" />
+    <None Remove="Images\delete.png" />
     <None Remove="Images\edit.png" />
     <None Remove="Images\ellipse.png" />
     <None Remove="Images\export.png" />
@@ -46,12 +46,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\1px.png" />
     <Resource Include="Images\circle.png" />
     <Resource Include="Images\color_wheel.png" />
     <Resource Include="Images\copy.png" />
     <Resource Include="Images\cut.png" />
     <Resource Include="Images\dash.png" />
+    <Resource Include="Images\delete.png" />
     <Resource Include="Images\edit.png" />
     <Resource Include="Images\ellipse.png" />
     <Resource Include="Images\export.png" />

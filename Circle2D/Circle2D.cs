@@ -13,7 +13,7 @@ namespace Circle2D
 
         public DoubleCollection StrokeDash { get; set; }
 
-        
+
         public SolidColorBrush Brush { get; set; }
         public string Name => "Circle";
         public string Icon => "Images/circle.png";
