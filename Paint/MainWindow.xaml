@@ -82,6 +82,13 @@
                             <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
+
+                    <Fluent:Button Name="Group" Header="Group" Padding="4,4,4,0" Click="Group_Click">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+
                 </Fluent:RibbonGroupBox>
                 <!--Clipboard-->
                 <Fluent:RibbonGroupBox Header="Clipboard">
