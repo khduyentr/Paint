@@ -53,14 +53,20 @@ namespace Contract
                 StrokeDashArray = dash
             };
 
-
-            return line;
-        }
+			return line;
+		}
 
 
         public IShape Clone()
         {
             return new Point2D();
         }
+        public Point2D deepCopy()
+		{
+            Point2D temp = new Point2D();
+            temp.Y = this.Y;
+            temp.X = this.X;
+            return temp;
+		}
     }
 }

@@ -66,7 +66,13 @@
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
 
-                        <Fluent:Button Name="pasteButton" Header="Paste" Padding="4,4,4,0">
+                        <Fluent:Button Name="Delete" Header="Delete" Padding="4,4,4,0" Click="Delete_Click">
+                            <Fluent:Button.LargeIcon>
+                                <Image Source="Images/edit.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            </Fluent:Button.LargeIcon>
+                        </Fluent:Button>
+
+                        <Fluent:Button Name="pasteButton" Header="Paste" Padding="4,4,4,0" Click="pasteButton_Click">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
@@ -77,7 +83,7 @@
                                 <Image Source="Images/cut.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>
                         </Fluent:Button>
-                        <Fluent:Button Name="copyButton" Header="Copy" Padding="4,4,4,0">
+                        <Fluent:Button Name="copyButton" Header="Copy" Padding="4,4,4,0" Click="copyButton_Click">
                             <Fluent:Button.LargeIcon>
                                 <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
                             </Fluent:Button.LargeIcon>

@@ -58,48 +58,39 @@ namespace Contract
 		{
             List<controlPoint> controlPoints = new List<controlPoint>();
             
-            controlPoint diagPointTopLeft = new controlPoint();
+            controlPoint diagPointTopLeft = new diagPoint();
             diagPointTopLeft.setPoint(_leftTop.X, _leftTop.Y);
-            diagPointTopLeft.edge = "topleft";
 
-            controlPoint diagPointBottomLeft = new controlPoint();
+            controlPoint diagPointBottomLeft = new diagPoint();
             diagPointBottomLeft.setPoint(_leftTop.X, RightBottom.Y);
-            diagPointBottomLeft.edge = "bottomleft";
 
-            controlPoint diagPointTopRight = new controlPoint();
+            controlPoint diagPointTopRight = new diagPoint();
             diagPointTopRight.setPoint(_rightBottom.X, _leftTop.Y);
-            diagPointTopRight.edge = "topright";
 
-            controlPoint diagPointBottomRight = new controlPoint();
+            controlPoint diagPointBottomRight = new diagPoint();
             diagPointBottomRight.setPoint(_rightBottom.X, _rightBottom.Y);
-            diagPointBottomRight.edge = "bottomright";
 
             //one way control Point
 
-            controlPoint diagPointRight = new controlPoint();
+            controlPoint diagPointRight = new oneSidePoint();
             diagPointRight.setPoint(_rightBottom.X, (_rightBottom.Y + _leftTop.Y) / 2);
-            diagPointRight.edge = "right";
 
-            controlPoint diagPointLeft = new controlPoint();
+            controlPoint diagPointLeft = new oneSidePoint();
             diagPointLeft.setPoint(_leftTop.X, (_rightBottom.Y + _leftTop.Y) / 2);
-            diagPointLeft.edge = "left";
     
-            controlPoint diagPointTop = new controlPoint();
+            controlPoint diagPointTop = new oneSidePoint();
             diagPointTop.setPoint((_leftTop.X + _rightBottom.X) / 2, _leftTop.Y);
-            diagPointTop.edge = "top";
 
-            controlPoint diagPointBottom = new controlPoint();
+            controlPoint diagPointBottom = new oneSidePoint();
             diagPointBottom.setPoint((_leftTop.X + _rightBottom.X) / 2, _rightBottom.Y);
-            diagPointBottom.edge = "bottom";
 
 
             controlPoint angleControlPoint = new rotatePoint();
             angleControlPoint.setPoint((_rightBottom.X + _leftTop.X)/2, Math.Min(_rightBottom.Y, _leftTop.Y) - 50);
-            angleControlPoint.edge = "rotate";
 
             controlPoint moveControlPoint = new controlPoint();
             moveControlPoint.setPoint((_leftTop.X + _rightBottom.X) / 2, (_leftTop.Y + _rightBottom.Y) / 2);
-            moveControlPoint.edge = "center";
+            moveControlPoint.type = "move";
 
             controlPoints.Add(diagPointTopLeft);
             controlPoints.Add(diagPointTopRight);
@@ -147,6 +138,16 @@ namespace Contract
             rect.RenderTransform = transform;
 
             return rect;
+		}
+
+        virtual public CShape deepCopy()
+		{
+            return new CShape()
+            {
+                LeftTop = this._leftTop,
+                RightBottom = this._rightBottom,
+                _rotateAngle = this._rotateAngle,
+            };
 		}
 	}
 }
