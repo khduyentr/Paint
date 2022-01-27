@@ -1,7 +1,7 @@
 using Contract;
 using System;
+using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -38,27 +38,63 @@ namespace Line2D
 				StrokeThickness = thickness,
 				Stroke = brush,
 				StrokeDashArray = dash
-
 			};
 
-			var left = Math.Min(_rightBottom.X, _leftTop.X);
-			var top = Math.Min(_rightBottom.Y, _leftTop.Y);
-
-			var right = Math.Max(_rightBottom.X, _leftTop.X);
-			var bottom = Math.Max(_rightBottom.Y, _leftTop.Y);
-
-			var width = right - left;
-			var height = bottom - top;
-
-			Canvas.SetLeft(line, left);
-			Canvas.SetTop(line, top);
+			var width = Math.Abs(_leftTop.X - _rightBottom.X);
+			var height = Math.Abs(_leftTop.Y - _rightBottom.Y);
 
 			RotateTransform transform = new RotateTransform(this._rotateAngle);
-			transform.CenterX = width * 1.0 / 2;
-			transform.CenterY = height * 1.0 / 2;
 
 			line.RenderTransform = transform;
 			return line;
+		}
+		override public List<controlPoint> GetControlPoints()
+		{
+			List<controlPoint> controlPoints = new List<controlPoint>();
+
+			controlPoint diagPointTopLeft = new diagPoint();
+			diagPointTopLeft.setPoint(_leftTop.X, _leftTop.Y);
+
+			controlPoint diagPointBottomLeft = new diagPoint();
+			diagPointBottomLeft.setPoint(_leftTop.X, RightBottom.Y);
+
+			controlPoint diagPointTopRight = new diagPoint();
+			diagPointTopRight.setPoint(_rightBottom.X, _leftTop.Y);
+
+			controlPoint diagPointBottomRight = new diagPoint();
+			diagPointBottomRight.setPoint(_rightBottom.X, _rightBottom.Y);
+
+			//one way control Point
+
+			controlPoint diagPointRight = new oneSidePoint();
+			diagPointRight.setPoint(_rightBottom.X, (_rightBottom.Y + _leftTop.Y) / 2);
+
+			controlPoint diagPointLeft = new oneSidePoint();
+			diagPointLeft.setPoint(_leftTop.X, (_rightBottom.Y + _leftTop.Y) / 2);
+
+			controlPoint diagPointTop = new oneSidePoint();
+			diagPointTop.setPoint((_leftTop.X + _rightBottom.X) / 2, _leftTop.Y);
+
+			controlPoint diagPointBottom = new oneSidePoint();
+			diagPointBottom.setPoint((_leftTop.X + _rightBottom.X) / 2, _rightBottom.Y);
+
+			controlPoint moveControlPoint = new controlPoint();
+			moveControlPoint.setPoint((_leftTop.X + _rightBottom.X) / 2, (_leftTop.Y + _rightBottom.Y) / 2);
+			moveControlPoint.type = "move";
+
+			controlPoints.Add(diagPointTopLeft);
+			controlPoints.Add(diagPointTopRight);
+			controlPoints.Add(diagPointBottomLeft);
+			controlPoints.Add(diagPointBottomRight);
+
+			controlPoints.Add(diagPointRight);
+			controlPoints.Add(diagPointLeft);
+			controlPoints.Add(diagPointBottom);
+			controlPoints.Add(diagPointTop);
+
+			controlPoints.Add(moveControlPoint);
+
+			return controlPoints;
 		}
 
 		public IShape Clone()
