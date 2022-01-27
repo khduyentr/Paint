@@ -64,7 +64,7 @@
                             <Image Source="Images/edit.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
-                    
+
                     <Fluent:Button Name="undoButton" Header="Undo" Padding="4,4,4,0" Click="undoButton_Click">
                         <Fluent:Button.LargeIcon>
                             <Image Source="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
@@ -82,13 +82,6 @@
                             <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
-
-                    <Fluent:Button Name="Group" Header="Group" Padding="4,4,4,0" Click="Group_Click">
-                        <Fluent:Button.LargeIcon>
-                            <Image Source="Images/delete.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                        </Fluent:Button.LargeIcon>
-                    </Fluent:Button>
-
                 </Fluent:RibbonGroupBox>
                 <!--Clipboard-->
                 <Fluent:RibbonGroupBox Header="Clipboard">
@@ -271,62 +264,6 @@
                         </Fluent:Button>
                     </StackPanel>
 
-                </Fluent:RibbonGroupBox>
-
-                <!--<Fluent:RibbonGroupBox Header="Testing">
-                    <StackPanel Orientation="Horizontal">
-                        <Fluent:Button Name="newLineButton" Header="Line" Padding="4,4,4,0"
-                                       Click="lineButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/paste.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-
-                        <Fluent:Button Name="newRectangleButton" Header="Rect" Padding="4,4,4,0"
-                                       Click="rectangleButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/cut.png" Width="30" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-                        <Fluent:Button Name="newEllipseButton" Header="Ellipse" Padding="4,4,4,0"
-                                       Click="ellipseButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-
-                        <Fluent:Button Name="newCircleButton" Header="Circle" Padding="4,4,4,0"
-                                       Click="circleButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-
-                        <Fluent:Button Name="newSquareButton" Header="Square" Padding="4,4,4,0"
-                                       Click="squareButton_Click">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/copy.png"  RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-                    </StackPanel>
-                </Fluent:RibbonGroupBox>-->
-            </Fluent:RibbonTabItem>
-
-            <Fluent:RibbonTabItem Header="View">
-                <Fluent:RibbonGroupBox Header="Zoom">
-                    <StackPanel Orientation="Horizontal">
-                        <Fluent:Button Name="zoomInButton" Header="Zoom in" Padding="4,4,4,0">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/zoom_in.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-
-                        <Fluent:Button Name="zoomOutButton" Header="Zoom out" Padding="4,4,4,0">
-                            <Fluent:Button.LargeIcon>
-                                <Image Source="Images/zoom_out.png" RenderOptions.BitmapScalingMode="HighQuality"></Image>
-                            </Fluent:Button.LargeIcon>
-                        </Fluent:Button>
-                    </StackPanel>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
