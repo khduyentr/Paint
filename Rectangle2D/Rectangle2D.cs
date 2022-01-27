@@ -7,22 +7,8 @@ using System.Windows.Shapes;
 
 namespace Rectangle2D
 {
-    public class Rectangle2D : IShape
+    public class Rectangle2D : CShape, IShape
     {
-        private Point2D _leftTop = new Point2D();
-        private Point2D _rightBottom = new Point2D();
-
-        public Point2D LeftTop   // property
-        {
-            get { return _leftTop; }   // get method
-            set { _leftTop = value; }  // set method
-        }
-
-        public Point2D RightBottom
-        {
-            get { return _rightBottom; }   // get method
-            set { _rightBottom = value; }  // set method
-        }
         public SolidColorBrush Brush { get; set; }
 
         public DoubleCollection StrokeDash { get; set; }
@@ -56,7 +42,6 @@ namespace Rectangle2D
             {
                 Width = width,
                 Height = height,
-
                 StrokeThickness = thickness,
                 Stroke = brush,
                 StrokeDashArray = dash
@@ -65,12 +50,36 @@ namespace Rectangle2D
             Canvas.SetLeft(rect, left);
             Canvas.SetTop(rect, top);
 
+            RotateTransform transform = new RotateTransform(this._rotateAngle);
+            transform.CenterX = width * 1.0 / 2;
+            transform.CenterY = height * 1.0 / 2;
+
+            rect.RenderTransform = transform;
+
             return rect;
         }
 
         public IShape Clone()
         {
             return new Rectangle2D();
+        }
+
+        override public CShape deepCopy()
+        {
+            Rectangle2D temp = new Rectangle2D();
+
+            temp.LeftTop = this._leftTop.deepCopy();
+            temp.RightBottom = this._rightBottom.deepCopy();
+            temp._rotateAngle = this._rotateAngle;
+            temp.Thickness = this.Thickness;
+
+            if (this.Brush != null)
+                temp.Brush = this.Brush.Clone();
+
+            if (this.StrokeDash != null)
+                temp.StrokeDash = this.StrokeDash.Clone();
+
+            return temp;
         }
     }
 }

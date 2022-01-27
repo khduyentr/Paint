@@ -19,8 +19,13 @@ namespace Contract
         public SolidColorBrush Brush { get; set; }
         public DoubleCollection StrokeDash { get; set; }
         public string Name => "Point";
-
         public int Thickness { get; set; }
+
+        public bool isHovering(double x, double y)
+		{
+            return false;
+		}
+      
 
         public void HandleStart(double x, double y)
         {
@@ -48,14 +53,20 @@ namespace Contract
                 StrokeDashArray = dash
             };
 
-
-            return line;
-        }
+			return line;
+		}
 
 
         public IShape Clone()
         {
             return new Point2D();
         }
+        public Point2D deepCopy()
+		{
+            Point2D temp = new Point2D();
+            temp.Y = this.Y;
+            temp.X = this.X;
+            return temp;
+		}
     }
 }

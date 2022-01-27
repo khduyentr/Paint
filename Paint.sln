@@ -1,21 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Paint", "Paint\Paint.csproj", "{440A8828-86B7-4301-AB24-946292D7210D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract", "Contract\Contract.csproj", "{9E88BE4C-E245-4C59-BA42-C27C7DF332B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contract", "Contract\Contract.csproj", "{9E88BE4C-E245-4C59-BA42-C27C7DF332B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Line2D", "Line2D\Line2D.csproj", "{4AFD0278-C504-4A8B-973D-F3C53233828E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Line2D", "Line2D\Line2D.csproj", "{4AFD0278-C504-4A8B-973D-F3C53233828E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rectangle2D", "Rectangle2D\Rectangle2D.csproj", "{A1BA8EFA-98B0-4CF0-9F56-31D4A7FD8DC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rectangle2D", "Rectangle2D\Rectangle2D.csproj", "{A1BA8EFA-98B0-4CF0-9F56-31D4A7FD8DC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ellipse2D", "Ellipse2D\Ellipse2D.csproj", "{507A0428-8CA3-4BF7-B53F-99FFFF0855A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ellipse2D", "Ellipse2D\Ellipse2D.csproj", "{507A0428-8CA3-4BF7-B53F-99FFFF0855A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Square2D", "Square2D\Square2D.csproj", "{20A85C68-B7DF-40EC-9E6C-0185A8C30019}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Square2D", "Square2D\Square2D.csproj", "{20A85C68-B7DF-40EC-9E6C-0185A8C30019}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Circle2D", "Circle2D\Circle2D.csproj", "{5D214327-92B4-4CB9-A9D0-21916DA62FC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Circle2D", "Circle2D\Circle2D.csproj", "{5D214327-92B4-4CB9-A9D0-21916DA62FC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

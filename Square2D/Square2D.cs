@@ -7,28 +7,14 @@ using System.Windows.Shapes;
 
 namespace Square2D
 {
-    public class Square2D : IShape
+    public class Square2D : CShape, IShape
     {
-        private Point2D _leftTop = new Point2D();
-        private Point2D _rightBottom = new Point2D();
 
-        public DoubleCollection StrokeDash { get; set; }
-
-        public Point2D LeftTop   // property
-        {
-            get { return _leftTop; }   // get method
-            set { _leftTop = value; }  // set method
-        }
-
-        public Point2D RightBottom
-        {
-            get { return _rightBottom; }   // get method
-            set { _rightBottom = value; }  // set method
-        }
         public string Name => "Square";
 
         public string Icon => "Images/square.png";
 
+        public DoubleCollection StrokeDash { get; set; }
         public SolidColorBrush Brush { get; set; }
         public int Thickness { get; set; }
 
@@ -97,12 +83,35 @@ namespace Square2D
                 Canvas.SetTop(square, _rightBottom.Y);
             }
 
+            RotateTransform transform = new RotateTransform(this._rotateAngle);
+            transform.CenterX = width * 1.0 / 2;
+            transform.CenterY = height * 1.0 / 2;
+
+            square.RenderTransform = transform;
+
             return square;
         }
 
         public IShape Clone()
         {
             return new Square2D();
+        }
+        override public CShape deepCopy()
+        {
+            Square2D temp = new Square2D();
+
+            temp.LeftTop = this._leftTop.deepCopy();
+            temp.RightBottom = this._rightBottom.deepCopy();
+            temp._rotateAngle = this._rotateAngle;
+            temp.Thickness = this.Thickness;
+
+            if (this.Brush != null)
+                temp.Brush = this.Brush.Clone();
+
+            if (this.StrokeDash != null)
+                temp.StrokeDash = this.StrokeDash.Clone();
+
+            return temp;
         }
     }
 }

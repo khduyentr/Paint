@@ -1,66 +1,122 @@
 using Contract;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Line2D
 {
-    public class Line2D : IShape
-    {
+	public class Line2D : CShape, IShape
+	{
+		public DoubleCollection StrokeDash { get; set; }
 
-        private Point2D _start = new Point2D();
-        private Point2D _end = new Point2D();
+		public SolidColorBrush Brush { get; set; }
+		public string Name => "Line";
+		public string Icon => "Images/line.png";
 
-        public Point2D Start   // property
-        {
-            get { return _start; }   // get method
-            set { _start = value; }  // set method
-        }
+		public int Thickness { get; set; }
 
-        public Point2D End   // property
-        {
-            get { return _end; }   // get method
-            set { _end = value; }  // set method
-        }
+		public void HandleStart(double x, double y)
+		{
+			_leftTop = new Point2D() { X = x, Y = y };
+		}
 
-        public DoubleCollection StrokeDash { get; set; }
+		public void HandleEnd(double x, double y)
+		{
+			_rightBottom = new Point2D() { X = x, Y = y };
+		}
 
-        public SolidColorBrush Brush { get; set; }
-        public string Name => "Line";
-        public string Icon => "Images/line.png";
+		public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
+		{
+			Line line = new Line()
+			{
+				X1 = _leftTop.X,
+				Y1 = _leftTop.Y,
+				X2 = _rightBottom.X,
+				Y2 = _rightBottom.Y,
+				StrokeThickness = thickness,
+				Stroke = brush,
+				StrokeDashArray = dash
+			};
 
-        public int Thickness { get; set; }
+			var width = Math.Abs(_leftTop.X - _rightBottom.X);
+			var height = Math.Abs(_leftTop.Y - _rightBottom.Y);
 
-        public void HandleStart(double x, double y)
-        {
-            _start = new Point2D() { X = x, Y = y };
-        }
+			RotateTransform transform = new RotateTransform(this._rotateAngle);
 
-        public void HandleEnd(double x, double y)
-        {
-            _end = new Point2D() { X = x, Y = y };
-        }
+			line.RenderTransform = transform;
+			return line;
+		}
+		override public List<controlPoint> GetControlPoints()
+		{
+			List<controlPoint> controlPoints = new List<controlPoint>();
 
-        public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
-        {
-            Line line = new Line()
-            {
-                X1 = _start.X,
-                Y1 = _start.Y,
-                X2 = _end.X,
-                Y2 = _end.Y,
-                StrokeThickness = thickness,
-                Stroke = brush,
-                StrokeDashArray = dash
+			controlPoint diagPointTopLeft = new diagPoint();
+			diagPointTopLeft.setPoint(_leftTop.X, _leftTop.Y);
 
-            };
-            return line;
-        }
+			controlPoint diagPointBottomLeft = new diagPoint();
+			diagPointBottomLeft.setPoint(_leftTop.X, RightBottom.Y);
 
-        public IShape Clone()
-        {
-            return new Line2D();
-        }
-    }
+			controlPoint diagPointTopRight = new diagPoint();
+			diagPointTopRight.setPoint(_rightBottom.X, _leftTop.Y);
+
+			controlPoint diagPointBottomRight = new diagPoint();
+			diagPointBottomRight.setPoint(_rightBottom.X, _rightBottom.Y);
+
+			//one way control Point
+
+			controlPoint diagPointRight = new oneSidePoint();
+			diagPointRight.setPoint(_rightBottom.X, (_rightBottom.Y + _leftTop.Y) / 2);
+
+			controlPoint diagPointLeft = new oneSidePoint();
+			diagPointLeft.setPoint(_leftTop.X, (_rightBottom.Y + _leftTop.Y) / 2);
+
+			controlPoint diagPointTop = new oneSidePoint();
+			diagPointTop.setPoint((_leftTop.X + _rightBottom.X) / 2, _leftTop.Y);
+
+			controlPoint diagPointBottom = new oneSidePoint();
+			diagPointBottom.setPoint((_leftTop.X + _rightBottom.X) / 2, _rightBottom.Y);
+
+			controlPoint moveControlPoint = new controlPoint();
+			moveControlPoint.setPoint((_leftTop.X + _rightBottom.X) / 2, (_leftTop.Y + _rightBottom.Y) / 2);
+			moveControlPoint.type = "move";
+
+			controlPoints.Add(diagPointTopLeft);
+			controlPoints.Add(diagPointTopRight);
+			controlPoints.Add(diagPointBottomLeft);
+			controlPoints.Add(diagPointBottomRight);
+
+			controlPoints.Add(diagPointRight);
+			controlPoints.Add(diagPointLeft);
+			controlPoints.Add(diagPointBottom);
+			controlPoints.Add(diagPointTop);
+
+			controlPoints.Add(moveControlPoint);
+
+			return controlPoints;
+		}
+
+		public IShape Clone()
+		{
+			return new Line2D();
+		}
+		override public CShape deepCopy()
+		{
+			Line2D temp = new Line2D();
+
+			temp.LeftTop = this._leftTop.deepCopy();
+			temp.RightBottom = this._rightBottom.deepCopy();
+			temp._rotateAngle = this._rotateAngle;
+			temp.Thickness = this.Thickness;
+
+			if (this.Brush != null)
+				temp.Brush = this.Brush.Clone();
+
+			if (this.StrokeDash != null)
+				temp.StrokeDash = this.StrokeDash.Clone();
+
+			return temp;
+		}
+	}
 }

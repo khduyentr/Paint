@@ -7,29 +7,15 @@ using System.Windows.Shapes;
 
 namespace Ellipse2D
 {
-    public class Ellipse2D : IShape
+    public class Ellipse2D : CShape, IShape
     {
-        private Point2D _leftTop = new Point2D();
-        private Point2D _rightBottom = new Point2D();
-
+        public int Thickness { get; set; }
         public DoubleCollection StrokeDash { get; set; }
 
-        public Point2D LeftTop   // property
-        {
-            get { return _leftTop; }   // get method
-            set { _leftTop = value; }  // set method
-        }
-
-        public Point2D RightBottom
-        {
-            get { return _rightBottom; }   // get method
-            set { _rightBottom = value; }  // set method
-        }
         public SolidColorBrush Brush { get; set; }
         public string Name => "Ellipse";
         public string Icon => "Images/ellipse.png";
 
-        public int Thickness { get; set; }
 
         public void HandleStart(double x, double y)
         {
@@ -42,8 +28,6 @@ namespace Ellipse2D
             _rightBottom.X = x;
             _rightBottom.Y = y;
         }
-
-
 
         public UIElement Draw(SolidColorBrush brush, int thickness, DoubleCollection dash)
         {
@@ -70,12 +54,34 @@ namespace Ellipse2D
             Canvas.SetLeft(ellipse, left);
             Canvas.SetTop(ellipse, top);
 
+            RotateTransform transform = new RotateTransform(this._rotateAngle);
+            transform.CenterX = width * 1.0 / 2;
+            transform.CenterY = height * 1.0 / 2;
+
+            ellipse.RenderTransform = transform;
             return ellipse;
         }
 
         public IShape Clone()
         {
             return new Ellipse2D();
+        }
+        override public CShape deepCopy()
+        {
+            Ellipse2D temp = new Ellipse2D();
+
+            temp.LeftTop = this._leftTop.deepCopy();
+            temp.RightBottom = this._rightBottom.deepCopy();
+            temp._rotateAngle = this._rotateAngle;
+            temp.Thickness = this.Thickness;
+
+            if (this.Brush != null)
+                temp.Brush = this.Brush.Clone();
+
+            if (this.StrokeDash != null)
+                temp.StrokeDash = this.StrokeDash.Clone();
+
+            return temp;
         }
     }
 }
