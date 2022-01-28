@@ -42,19 +42,6 @@
                 </Fluent:ApplicationMenu>
             </Fluent:Ribbon.Menu>
 
-            <!--<Fluent:Ribbon.QuickAccessItems>
-                <Fluent:QuickAccessMenuItem Header="Save">
-                    <Fluent:Button Icon="Images/save.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
-                </Fluent:QuickAccessMenuItem>
-
-                <Fluent:QuickAccessMenuItem Header="Undo">
-                    <Fluent:Button Icon="Images/undo.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
-                </Fluent:QuickAccessMenuItem>
-                <Fluent:QuickAccessMenuItem Header="Redo">
-                    <Fluent:Button Icon="Images/redo.png" RenderOptions.BitmapScalingMode="HighQuality"></Fluent:Button>
-                </Fluent:QuickAccessMenuItem>
-            </Fluent:Ribbon.QuickAccessItems>-->
-
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <!--Tools-->
@@ -161,28 +148,6 @@
                             </ComboBoxItem>
                         </Fluent:ComboBox>
                     </StackPanel>
-                    <Fluent:DropDownButton Name="chooseThickness" Header="Thickness" 
-                                           Icon="Images/thickness.png" LargeIcon="Images/thickness.png" Height="68" VerticalAlignment="Top"
-										   >
-                        <Fluent:Gallery Name="chooseThicknessMenu" MaxItemsInRow="1">
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="40" Height="1" BorderBrush="Black" BorderThickness="1"/>
-                                <Label Content="1 px"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="40" Height="2" BorderBrush="Black" BorderThickness="2"/>
-                                <Label Content="2 px"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" >
-                                <Border Width="40" Height="3" BorderBrush="Black" BorderThickness="3"/>
-                                <Label Content="3 px"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="40" Height="5" BorderBrush="Black" BorderThickness="5"/>
-                                <Label Content="5 px"/>
-                            </StackPanel>
-                        </Fluent:Gallery>
-                    </Fluent:DropDownButton>
                 </Fluent:RibbonGroupBox>
 
                 <!--Colors-->
